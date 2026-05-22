@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "node ./scripts/prepare.js",
     "dev": "node ./scripts/dev.mjs",
     "build": "turbo run build",
     "test": "turbo run test",
