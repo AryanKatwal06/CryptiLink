@@ -1,5 +1,0 @@
-public enum OfflineActivityType {
-    OFFLINE_TRANSACTION,
-    ONLINE_WITHDRAW_AFTER_OFFLINE,
-    SYNC_ATTEMPT
-}

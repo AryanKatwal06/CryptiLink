@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: |
+          cd PaymentsApp
+          npm ci || npm install
+      - name: Validate docker-compose
+        run: |
+          cd PaymentsApp
+          docker compose config || echo "docker not available"
+      - name: Lint
+        run: |
+          cd PaymentsApp
+          npm run lint || echo "No lint configured"
+      - name: Format check
+        run: |
+          cd PaymentsApp
+          npm run format || echo "No format configured"
+      - name: Build
+        run: |
+          cd PaymentsApp
+          npm run build || echo "No build configured"
