@@ -3,7 +3,10 @@
   "pass": true,
   "missing": [],
   "readmeMissing": [],
-  "tsIssues": [],
+  "tsIssues": [
+    "tsconfig missing reference to shared",
+    "tsconfig missing reference to mobile"
+  ],
   "warnings": []
 }
 ```
