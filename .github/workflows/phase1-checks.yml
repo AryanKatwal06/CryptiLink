@@ -1,0 +1,60 @@
+name: Phase 1 Architecture Checks
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  phase1:
+    name: Phase 1 verification
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install PaymentsApp deps
+        working-directory: ./PaymentsApp
+        run: npm ci
+
+      - name: Run Phase 1 verifier
+        working-directory: ./PaymentsApp
+        run: npm run verify:phase1
+
+      - name: Generate depcruise report
+        working-directory: ./PaymentsApp
+        run: |
+          mkdir -p .gha
+          npx depcruise --config .dependency-cruiser.js mobile -f json -o .gha/depcruise.json || true
+
+      - name: Generate ESLint report
+        working-directory: ./PaymentsApp
+        run: |
+          mkdir -p .gha
+          npx eslint . --ext .js,.ts,.tsx -f json -o .gha/eslint-report.json || true
+
+      - name: Upload Phase 1 report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-1-report
+          path: ./PaymentsApp/docs/phase-1-report.md
+
+      - name: Upload ESLint report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eslint-report
+          path: ./PaymentsApp/.gha/eslint-report.json
+
+      - name: Upload depcruise report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: depcruise-report
+          path: ./PaymentsApp/.gha/depcruise.json

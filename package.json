@@ -16,4 +16,7 @@
     "verify": "npm --prefix PaymentsApp run verify",
     "setup": "npm --prefix PaymentsApp run setup"
   }
+  ,"devDependencies": {
+    "typescript": "5.1.6"
+  }
 }

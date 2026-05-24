@@ -15,6 +15,8 @@
     "lint": "npx eslint . --ext .js,.ts,.tsx --no-error-on-unmatched-pattern",
     "format": "npx prettier --check .",
     "verify": "bash ./scripts/verify.sh && npm run lint && npm run format",
+    "verify:phase1": "node scripts/verify-phase-1.js && npm run lint && npm run depcruise",
+    "depcruise": "depcruise --config .dependency-cruiser.js mobile",
     "setup": "bash ./scripts/setup.sh"
   },
   "lint-staged": {
@@ -24,14 +26,17 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.0",
-    "@commitlint/config-conventional": "^17.6.0",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
-    "eslint": "^8.31.0",
-    "husky": "^8.0.0",
-    "lint-staged": "^13.2.3",
-    "prettier": "^2.8.8",
-    "turbo": "^1.10.12"
+    "@commitlint/cli": "17.6.0",
+    "@commitlint/config-conventional": "17.6.0",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
+    "dependency-cruiser": "17.4.2",
+    "eslint": "8.57.1",
+    "husky": "8.0.0",
+    "lint-staged": "13.2.3",
+    "prettier": "2.8.8",
+    "turbo": "1.10.12",
+    "dotenv": "16.1.4",
+    "typescript": "5.1.6"
   }
 }

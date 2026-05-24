@@ -1,4 +1,5 @@
 #!/bin/sh
-. "$PWD"/.husky/_/husky.sh
+. "$(dirname "$0")/_/husky.sh"
 
-npm run verify
+echo "Running Phase 1 verification before push..."
+npm run verify:phase1

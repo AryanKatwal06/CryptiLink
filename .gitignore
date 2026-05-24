@@ -29,3 +29,34 @@ docker-compose.*.yml
 *.pem
 *.key
 secrets*
+
+# PaymentsApp local ignores (Phase 1)
+PaymentsApp/node_modules/
+PaymentsApp/**/node_modules/
+PaymentsApp/.env
+PaymentsApp/.env.local
+PaymentsApp/.env.*.local
+
+# React Native (Android / iOS) build artifacts
+PaymentsApp/mobile/android/.gradle/
+PaymentsApp/mobile/android/app/build/
+PaymentsApp/mobile/android/build/
+PaymentsApp/mobile/android/**/build/
+PaymentsApp/mobile/ios/Pods/
+PaymentsApp/mobile/ios/DerivedData/
+PaymentsApp/mobile/ios/build/
+
+# Java backend build
+PaymentsApp/backend/target/
+PaymentsApp/backend/.gradle/
+
+# General build / cache / logs for PaymentsApp
+PaymentsApp/**/build/
+PaymentsApp/.DS_Store
+PaymentsApp/coverage/
+PaymentsApp/logs/
+PaymentsApp/*.log
+
+# IDE / editor
+PaymentsApp/.idea/
+PaymentsApp/.vscode/
