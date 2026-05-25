@@ -23,3 +23,17 @@ npm install
 npm run verify:phase1
 ```
 
+Phase 2 Status: Completed (May 26, 2026)
+
+Quick Phase 2 checks:
+
+```bash
+cd PaymentsApp
+npm install
+npm run test:mobile:smoke    # quick smoke checks for mobile files
+npm run verify:phase2        # runs verification and writes docs/phase-2-report.md
+```
+
+CI: a GitHub Actions workflow validates Phase 2 on push and PR and uploads the verification report as an artifact: `.github/workflows/phase-2-ci.yml`.
+
+

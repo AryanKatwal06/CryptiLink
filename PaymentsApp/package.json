@@ -9,6 +9,11 @@
   "scripts": {
     "prepare": "node ./scripts/prepare.js",
     "dev": "node ./scripts/dev.mjs",
+    "mobile:metro": "cd mobile && npx react-native start",
+    "mobile:android": "cd mobile && npx react-native run-android",
+    "mobile:ios": "cd mobile && npx react-native run-ios",
+    "verify:phase2": "node ./scripts/verify-phase-2.js",
+    "test:mobile:smoke": "node ./mobile/tests/run-tests.js",
     "build": "turbo run build",
     "test": "turbo run test",
     "clean": "bash ./scripts/clean.sh",

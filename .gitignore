@@ -45,6 +45,11 @@ PaymentsApp/mobile/android/**/build/
 PaymentsApp/mobile/ios/Pods/
 PaymentsApp/mobile/ios/DerivedData/
 PaymentsApp/mobile/ios/build/
+PaymentsApp/mobile/android/local.properties
+PaymentsApp/mobile/*.keystore
+PaymentsApp/mobile/android/*.keystore
+PaymentsApp/mobile/ios/GoogleService-Info.plist
+PaymentsApp/mobile/ios/GoogleService-Info-*.plist
 
 # Java backend build
 PaymentsApp/backend/target/
