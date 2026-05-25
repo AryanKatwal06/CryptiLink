@@ -1,8 +1,8 @@
-import tokens from './tokens'
+import { colors, spacing } from './tokens'
 
 export const ThemeRegistry = {
-  getColors: () => (tokens as any).colors || {},
-  getSpacing: () => (tokens as any).spacing || {},
+  getColors: () => colors || {},
+  getSpacing: () => spacing || {},
 }
 
 export default ThemeRegistry
