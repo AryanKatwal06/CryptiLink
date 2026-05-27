@@ -1,4 +1,4 @@
-require('dotenv/config');
+import 'dotenv/config';
 
 function ensure(value: string | undefined, label: string): string {
   if (!value || value.trim() === '') {
@@ -8,21 +8,16 @@ function ensure(value: string | undefined, label: string): string {
 }
 
 async function main(): Promise<void> {
-  const primary = process.env.DATABASE_URL ?? process.env.DATABASE_URL_DEV;
-  const direct = process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL_DEV_UNPOOLED;
-  const staging = process.env.DATABASE_URL_STAGING;
-  const shadow = process.env.DATABASE_SHADOW_URL ?? process.env.DATABASE_URL_DEV_UNPOOLED;
-
-  ensure(primary, 'DATABASE_URL or DATABASE_URL_DEV');
-  ensure(direct, 'DATABASE_URL_UNPOOLED or DATABASE_URL_DEV_UNPOOLED');
-  ensure(staging, 'DATABASE_URL_STAGING');
-  ensure(shadow, 'DATABASE_SHADOW_URL or DATABASE_URL_DEV_UNPOOLED');
+  const primary = ensure(process.env.DATABASE_URL ?? process.env.DATABASE_URL_DEV, 'DATABASE_URL or DATABASE_URL_DEV');
+  const direct = ensure(process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL_DEV_UNPOOLED, 'DATABASE_URL_UNPOOLED or DATABASE_URL_DEV_UNPOOLED');
+  const staging = ensure(process.env.DATABASE_URL_STAGING, 'DATABASE_URL_STAGING');
+  const shadow = ensure(process.env.DATABASE_SHADOW_URL ?? process.env.DATABASE_URL_DEV_UNPOOLED, 'DATABASE_SHADOW_URL or DATABASE_URL_DEV_UNPOOLED');
 
   if (
-    !primary!.includes('sslmode=require') ||
-    !direct!.includes('sslmode=require') ||
-    !staging!.includes('sslmode=require') ||
-    !shadow!.includes('sslmode=require')
+    !primary.includes('sslmode=require') ||
+    !direct.includes('sslmode=require') ||
+    !staging.includes('sslmode=require') ||
+    !shadow.includes('sslmode=require')
   ) {
     throw new Error('[PaySys] Neon connection strings must include sslmode=require');
   }

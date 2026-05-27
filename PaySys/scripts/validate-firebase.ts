@@ -1,6 +1,6 @@
-require('dotenv/config');
-const fs = require('fs');
-const path = require('path');
+import 'dotenv/config';
+import * as fs from 'fs';
+import * as path from 'path';
 
 function ensure(value: string | undefined, label: string): string {
   if (!value || value.trim() === '') {

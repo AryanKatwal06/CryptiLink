@@ -1,4 +1,4 @@
-require('dotenv/config');
+import 'dotenv/config';
 
 function ensure(value: string | undefined, label: string): string {
   if (!value || value.trim() === '') {

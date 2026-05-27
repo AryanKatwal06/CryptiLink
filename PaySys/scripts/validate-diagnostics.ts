@@ -1,7 +1,6 @@
-require('dotenv/config');
-
-const fs = require('fs');
-const path = require('path');
+import 'dotenv/config';
+import * as fs from 'fs';
+import * as path from 'path';
 
 function ensureFile(relativePath: string, label: string): void {
   const fullPath = path.resolve(__dirname, '..', relativePath);
