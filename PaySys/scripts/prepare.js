@@ -13,6 +13,14 @@ if (!gitPath) {
   process.exit(0);
 }
 
-console.log('Found .git — installing husky hooks');
-const res = spawnSync('npx', ['husky', 'install', '.husky'], { stdio: 'inherit' });
+// Determine repository root (parent directory of the .git file/dir).
+const repoRoot = path.dirname(gitPath);
+
+console.log(`Found .git at ${gitPath} — installing husky hooks in ${repoRoot}`);
+// Run husky install from the repository root so husky can locate the git directory
+// even if .git is a file (worktree/gitfile) or the install is triggered from a workspace subfolder.
+const res = spawnSync('npx', ['husky', 'install', path.join(repoRoot, '.husky')], {
+  stdio: 'inherit',
+  cwd: repoRoot,
+});
 process.exit(res.status);
