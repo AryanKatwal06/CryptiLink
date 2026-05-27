@@ -1,0 +1,38 @@
+{
+  "name": "@paysys/mobile",
+  "private": true,
+  "version": "0.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@react-navigation/native": "6.1.18",
+    "@react-navigation/stack": "6.3.29",
+    "@tanstack/react-query": "5.51.23",
+    "axios": "1.16.1",
+    "react": "18.2.0",
+    "react-native": "0.74.5",
+    "react-native-config": "^1.6.1",
+    "react-native-gesture-handler": "2.16.2",
+    "react-native-mmkv": "2.12.2",
+    "react-native-reanimated": "3.15.4",
+    "react-native-safe-area-context": "4.10.8",
+    "react-native-screens": "3.31.1",
+    "zod": "3.23.8",
+    "zustand": "4.5.4"
+  },
+  "scripts": {
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "android:release": "cd android && .\\gradlew.bat assembleRelease",
+    "android:bundle": "cd android && .\\gradlew.bat bundleRelease",
+    "android:clean": "cd android && .\\gradlew.bat clean",
+    "ios": "react-native run-ios",
+    "web": "echo \"Web is not configured for the React Native CLI mobile workspace.\"",
+    "build": "tsc -p tsconfig.json",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --no-error-on-unmatched-pattern",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "test": "echo \"No mobile unit test runner configured yet.\"",
+    "validate": "npm run type-check && npm run lint && npm run format:check && npm run test"
+  }
+}

@@ -1,0 +1,8 @@
+rootProject.name = 'PaySys'
+include ':app'
+
+def reactNativeConfigDir = new File(rootProject.projectDir, '../../node_modules/react-native-config/android')
+if (reactNativeConfigDir.exists()) {
+	include ':react-native-config'
+	project(':react-native-config').projectDir = reactNativeConfigDir
+}

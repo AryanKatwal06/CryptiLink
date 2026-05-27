@@ -1,7 +1,7 @@
 services:
   mobile:
     build:
-      context: ./PaymentsApp
+      context: ./PaySys
       dockerfile: docker/Dockerfile.mobile
     command: ["sh", "-c", "tail -f /dev/null"]
 
@@ -22,7 +22,7 @@ services:
 
   backend:
     build:
-      context: ./PaymentsApp
+      context: ./PaySys
       dockerfile: docker/Dockerfile.backend
     command: ["sh", "-c", "tail -f /dev/null"]
     environment:

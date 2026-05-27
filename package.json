@@ -3,20 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "workspaces": [
-    "PaymentsApp"
+    "PaySys"
   ],
   "scripts": {
-    "prepare": "npm --prefix PaymentsApp run prepare",
-    "dev": "npm --prefix PaymentsApp run dev",
-    "build": "npm --prefix PaymentsApp run build",
-    "test": "npm --prefix PaymentsApp run test",
-    "clean": "npm --prefix PaymentsApp run clean",
-    "lint": "npm --prefix PaymentsApp run lint",
-    "format": "npm --prefix PaymentsApp run format",
-    "verify": "npm --prefix PaymentsApp run verify",
-    "setup": "npm --prefix PaymentsApp run setup"
-  }
-  ,"devDependencies": {
+    "prepare": "npm --prefix PaySys run prepare",
+    "dev": "npm --prefix PaySys run dev",
+    "build": "npm --prefix PaySys run build",
+    "test": "npm --prefix PaySys run test",
+    "clean": "npm --prefix PaySys run clean",
+    "lint": "npm --prefix PaySys run lint",
+    "format": "npm --prefix PaySys run format",
+    "verify": "npm --prefix PaySys run verify",
+    "setup": "npm --prefix PaySys run setup"
+  },
+  "devDependencies": {
     "typescript": "5.1.6"
   }
 }

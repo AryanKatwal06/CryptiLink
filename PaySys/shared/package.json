@@ -1,0 +1,11 @@
+{
+  "name": "@paysys/shared",
+  "private": true,
+  "version": "0.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "echo \"No shared tests yet.\""
+  }
+}

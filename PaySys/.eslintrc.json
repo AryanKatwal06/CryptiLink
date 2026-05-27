@@ -1,0 +1,59 @@
+{
+  "root": true,
+  "env": { "node": true, "es2021": true },
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "mobile/services",
+            "message": "Screens must not import services directly; use hooks/providers."
+          },
+          {
+            "name": "../backend",
+            "message": "Mobile code must not import backend modules directly."
+          }
+        ],
+        "patterns": ["**/shared/*/internal/**", "**/backend/**", "shared/*"]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["mobile/screens/**/*.ts", "mobile/screens/**/*.tsx"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "mobile/services",
+                "message": "Screens must not import services directly; use hooks/providers."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["mobile/**/*.js"],
+      "env": { "node": true },
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-require-imports": "off"
+      }
+    },
+    {
+      "files": ["scripts/**/*.js"],
+      "env": { "node": true },
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-require-imports": "off"
+      }
+    }
+  ]
+}

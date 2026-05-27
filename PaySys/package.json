@@ -1,0 +1,81 @@
+{
+  "name": "paysys",
+  "private": true,
+  "version": "0.0.0",
+  "workspaces": [
+    "mobile",
+    "shared"
+  ],
+  "scripts": {
+    "prepare": "node ./scripts/prepare.js",
+    "dev": "node ./scripts/dev.mjs",
+    "start": "cd mobile && npm run start",
+    "android": "cd mobile && npm run android",
+    "ios": "cd mobile && npm run ios",
+    "web": "cd mobile && npm run web",
+    "mobile:metro": "cd mobile && npm run start",
+    "mobile:android": "cd mobile && npm run android",
+    "mobile:android:release": "cd mobile && npm run android:release",
+    "mobile:android:bundle": "cd mobile && npm run android:bundle",
+    "mobile:android:clean": "cd mobile && npm run android:clean",
+    "mobile:ios": "cd mobile && npm run ios",
+    "verify:phase2": "node ./scripts/verify-phase-2.js",
+    "test:mobile:smoke": "node ./mobile/tests/run-tests.js",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "clean": "bash ./scripts/clean.sh",
+    "lint": "npx eslint . --ext .js,.ts,.tsx --no-error-on-unmatched-pattern",
+    "format": "npx prettier --check .",
+    "format:check": "npx prettier --check .",
+    "type-check": "npx tsc -p tsconfig.paysys.json --noEmit",
+    "verify": "bash ./scripts/verify.sh && npm run lint && npm run format",
+    "verify:phase1": "node scripts/verify-phase-1.js && npm run lint && npm run depcruise",
+    "depcruise": "depcruise --config .dependency-cruiser.js mobile",
+    "validate:db": "node -r ts-node/register/transpile-only scripts/validate-db.ts",
+    "validate:redis": "node -r ts-node/register/transpile-only scripts/validate-redis.ts",
+    "validate:firebase": "node -r ts-node/register/transpile-only scripts/validate-firebase.ts",
+    "validate:razorpay": "node -r ts-node/register/transpile-only scripts/validate-razorpay.ts",
+    "validate:diagnostics": "node -r ts-node/register/transpile-only scripts/validate-diagnostics.ts",
+    "validate:posthog": "node -r ts-node/register/transpile-only scripts/validate-posthog.ts",
+    "validate:services": "node -r ts-node/register/transpile-only scripts/validate-all-services.ts",
+    "infra:health": "npm run validate:services",
+    "validate": "npm run type-check && npm run lint && npm run format:check && npm run test",
+    "setup": "bash ./scripts/setup.sh"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,jsx}": [
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "17.6.0",
+    "@commitlint/config-conventional": "17.6.0",
+    "@react-native/metro-config": "^0.85.3",
+    "@types/node": "20.14.10",
+    "@types/react": "18.3.3",
+    "@typescript-eslint/eslint-plugin": "5.62.0",
+    "@typescript-eslint/parser": "5.62.0",
+    "dependency-cruiser": "17.4.2",
+    "dotenv": "16.1.4",
+    "eslint": "8.57.1",
+    "husky": "8.0.0",
+    "lint-staged": "13.2.3",
+    "prettier": "2.8.8",
+    "ts-node": "^10.9.2",
+    "turbo": "1.10.12",
+    "typescript": "5.1.6",
+    "zod": "3.23.8"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
+}

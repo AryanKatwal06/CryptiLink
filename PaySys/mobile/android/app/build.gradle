@@ -1,0 +1,71 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'com.google.gms.google-services'
+
+def readEnvValue = { String key ->
+    def envFile = rootProject.file('../../.env')
+    if (!envFile.exists()) {
+        return null
+    }
+
+    def properties = new java.util.Properties()
+    envFile.withInputStream { input ->
+        properties.load(input)
+    }
+    return properties.getProperty(key)
+}
+
+android {
+    namespace 'com.paysys.app'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.paysys.app"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    signingConfigs {
+        release {
+            def keystoreFileName = readEnvValue('ANDROID_KEYSTORE_FILE') ?: 'paysys-release.keystore'
+            def releaseStorePassword = readEnvValue('ANDROID_STORE_PASSWORD')
+            def releaseKeyAlias = readEnvValue('ANDROID_KEY_ALIAS')
+            def releaseKeyPassword = readEnvValue('ANDROID_KEY_PASSWORD')
+
+            storeFile file("${projectDir}/$keystoreFileName")
+            storePassword = releaseStorePassword
+            keyAlias = releaseKeyAlias
+            keyPassword = releaseKeyPassword
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+}
+
+dependencies {
+    implementation 'com.facebook.react:react-android:0.74.5'
+    implementation project(':react-native-config')
+}
+
+// react-native-config dotenv integration (conditional)
+def dotenvGradle = new File(project(':react-native-config').projectDir, 'dotenv.gradle')
+if (dotenvGradle.exists()) {
+    apply from: dotenvGradle
+}

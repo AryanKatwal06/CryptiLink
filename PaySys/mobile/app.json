@@ -1,0 +1,13 @@
+{
+  "name": "PaySys",
+  "displayName": "PaySys",
+  "slug": "paysys",
+  "scheme": "paysys",
+  "version": "0.0.0",
+  "orientation": "portrait",
+  "platforms": ["ios", "android"],
+  "extra": {
+    "API_BASE_URL": "http://localhost:3000",
+    "APP_ENV": "development"
+  }
+}

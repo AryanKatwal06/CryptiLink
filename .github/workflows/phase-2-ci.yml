@@ -3,10 +3,10 @@ name: Phase 2 CI - Mobile Verification
 on:
   push:
     paths:
-      - 'PaymentsApp/**'
+      - "PaySys/**"
   pull_request:
     paths:
-      - 'PaymentsApp/**'
+      - "PaySys/**"
 
 concurrency:
   group: phase-2-ci
@@ -23,27 +23,27 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
-      - name: Install dependencies (PaymentsApp)
+      - name: Install dependencies (PaySys)
         run: npm ci
-        working-directory: PaymentsApp
+        working-directory: PaySys
 
       - name: Run dependency-cruiser
         run: npm run depcruise
-        working-directory: PaymentsApp
+        working-directory: PaySys
 
       - name: Run mobile smoke tests
         run: npm run test:mobile:smoke
-        working-directory: PaymentsApp
+        working-directory: PaySys
 
       - name: Run Phase 2 verification script
         run: npm run verify:phase2
-        working-directory: PaymentsApp
+        working-directory: PaySys
 
       - name: Upload Phase 2 report
         uses: actions/upload-artifact@v4
         with:
           name: phase-2-report
-          path: PaymentsApp/mobile/docs/phase-2-report.md
+          path: PaySys/mobile/docs/phase-2-report.md

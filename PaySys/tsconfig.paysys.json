@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true
+  },
+  "include": ["mobile/**/*", "shared/**/*", "scripts/**/*"],
+  "exclude": ["dist", "node_modules"]
+}

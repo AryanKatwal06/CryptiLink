@@ -1,67 +1,71 @@
 # Root-level ignores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Dependency caches and build output
 node_modules/
 **/node_modules/
-.DS_Store
-.env
-.env.*.local
-.env.local
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-coverage/
 dist/
 build/
+coverage/
 .turbo/
 .parcel-cache/
 .cache/
 .next/
 .expo/
-.idea/
-.vscode/
+.expo-shared/
+.eslintcache
 logs/
 *.log
-docker-compose.override.yml
-docker-compose.*.yml
-.eslintcache
-/.venv
-/.python-version
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local environment and secrets
+.env
+.env.*
+!*.env.example
+PaySys/**/.env
+PaySys/**/.env.*
+!PaySys/**/.env.example
+secrets*
 *.pem
 *.key
-secrets*
+*.jks
+*.p8
+*.p12
+*.mobileprovision
 
-# PaymentsApp local ignores (Phase 1)
-PaymentsApp/node_modules/
-PaymentsApp/**/node_modules/
-PaymentsApp/.env
-PaymentsApp/.env.local
-PaymentsApp/.env.*.local
+# PaySys workspace artifacts
+PaySys/.gha/
+PaySys/.DS_Store
+PaySys/coverage/
+PaySys/logs/
+PaySys/*.log
+PaySys/node_modules/
+PaySys/**/node_modules/
+PaySys/**/build/
+PaySys/**/.gradle/
+PaySys/backend/target/
+PaySys/mobile/android/.cxx/
+PaySys/mobile/android/local.properties
+PaySys/mobile/android/app/build/
+PaySys/mobile/android/build/
+PaySys/mobile/android/*.keystore
+PaySys/mobile/android/app/*.keystore
+PaySys/mobile/ios/Pods/
+PaySys/mobile/ios/DerivedData/
+PaySys/mobile/ios/build/
+PaySys/mobile/ios/GoogleService-Info.plist
+PaySys/mobile/ios/GoogleService-Info-*.plist
 
-# React Native (Android / iOS) build artifacts
-PaymentsApp/mobile/android/.gradle/
-PaymentsApp/mobile/android/app/build/
-PaymentsApp/mobile/android/build/
-PaymentsApp/mobile/android/**/build/
-PaymentsApp/mobile/ios/Pods/
-PaymentsApp/mobile/ios/DerivedData/
-PaymentsApp/mobile/ios/build/
-PaymentsApp/mobile/android/local.properties
-PaymentsApp/mobile/*.keystore
-PaymentsApp/mobile/android/*.keystore
-PaymentsApp/mobile/ios/GoogleService-Info.plist
-PaymentsApp/mobile/ios/GoogleService-Info-*.plist
-
-# Java backend build
-PaymentsApp/backend/target/
-PaymentsApp/backend/.gradle/
-
-# General build / cache / logs for PaymentsApp
-PaymentsApp/**/build/
-PaymentsApp/.DS_Store
-PaymentsApp/coverage/
-PaymentsApp/logs/
-PaymentsApp/*.log
-
-# IDE / editor
-PaymentsApp/.idea/
-PaymentsApp/.vscode/
+# Compose and local runtime overrides
+docker-compose.override.yml
+docker-compose.*.yml
+/.venv
+/.python-version
