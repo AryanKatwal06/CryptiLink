@@ -1,4 +1,4 @@
-# Secure Wallet Application
+# PaySys
 
 This repository contains the PaySys workspace for the secure wallet foundation. It is organized as a single monorepo with a mobile app, backend services, shared contracts, infrastructure scaffolding, and the scripts used to validate each phase.
 
