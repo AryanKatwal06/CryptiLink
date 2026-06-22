@@ -1,128 +1,112 @@
-# CryptiLink Bank Server — Phase 1
+# CryptiLink Bank Server & Settlement Engine
 
-> Mock bank server and cryptographic foundation for the CryptiLink offline payment protocol.
-
-## What This Is
-
-CryptiLink lets a consumer pre-load money into an offline "vault" on their phone, backed by a bank-signed ECDSA certificate. This server handles:
-
-- **Wallet registration** — consumers register their ECDSA public key
-- **Certificate issuance** — bank signs a certificate authorizing offline spending
-- **Settlement** — merchants submit batches of offline transactions for verification
-- **Double-spend protection** — cumulative exposure caps enforced at settlement time
+This is the Node.js/Express backend for the CryptiLink offline payment protocol. It serves as the ultimate root of trust, handling wallet registration, hardware-backed certificate issuance, and secure asynchronous settlement using strict row-level database locking to enforce double-spend caps.
 
 ## Prerequisites
 
-- **Node.js** v20+
-- **PostgreSQL** 15+ (Docker recommended, or Neon free tier)
-- **npm** v9+
-
-## Quick Start
-
-### 1. Clone & Install
-
-```bash
-cd cryptilink-bank-server
-npm install
-```
-
-### 2. Set Up Environment
-
-```bash
-cp .env.example .env
-# Edit .env with your database connection string if needed
-```
-
-### 3. Start PostgreSQL (Docker)
-
-From the project root:
-
-```bash
-docker-compose up -d postgres
-```
-
-Then create the `cryptilink` database:
-
-```bash
-docker exec -it $(docker ps -q -f ancestor=postgres:15) psql -U postgres -c "CREATE DATABASE cryptilink;"
-```
-
-### 4. Run Migrations & Seed
-
-```bash
-npm run migrate
-npm run seed
-```
-
-### 5. Generate Bank Keys
-
-```bash
-npm run generate-keys
-```
-
-This creates an ECDSA prime256v1 keypair in `./keys/`.
-
-### 6. Start the Server
-
-```bash
-npm run dev
-```
-
-Server runs at `http://localhost:3000`.
-
-### 7. Run the Demo
-
-In a second terminal:
-
-```bash
-npm run demo
-```
-
-This walks through the full happy path: register → load → settle (with cap enforcement).
-
-### 8. Run Tests
-
-```bash
-npm test
-```
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET`  | `/api/v1/bank/public-key` | Fetch the bank's ECDSA public key |
-| `POST` | `/api/v1/wallet/register` | Register a new wallet with consumer's public key |
-| `POST` | `/api/v1/wallet/:walletId/load` | Pre-load funds and receive a signed certificate |
-| `POST` | `/api/v1/settle` | Submit a settlement batch from a merchant |
-
-## Security Caps
-
-These are **hardcoded** (not configurable via env) to prevent tampering:
-
-| Cap | Value | Purpose |
-|-----|-------|---------|
-| `MAX_OFFLINE_TX_AMOUNT` | ₹200 | Maximum per single offline transaction |
-| `MAX_OFFLINE_CUMULATIVE` | ₹500 | Maximum total exposure before certificate refresh |
-
-## Architecture
-
-```
-src/
-├── config/          # Environment + security constants
-├── crypto/          # ECDSA keys, signing, compact payload codec
-├── db/              # PostgreSQL pool + migrations
-├── routes/          # Express route handlers
-├── services/        # Business logic (wallet, certificate, settlement)
-│   └── settlement/  # Isolated settlement engine (extractable)
-└── types/           # TypeScript type definitions + specs
-```
+- **Node.js**: v20 or newer
+- **Docker**: For running the PostgreSQL database via `docker-compose` (optional if you have a local Postgres instance running).
+- **PostgreSQL**: v15 or newer (if not using Docker).
 
 ## Environment Variables
 
-See [.env.example](.env.example) for the full list.
+Copy `.env.example` to `.env` in this directory:
+```bash
+cp .env.example .env
+```
 
-## Cryptographic Notes
+### Configuration Reference
 
-- **Curve**: `prime256v1` (OpenSSL) = `secp256r1` (NIST) = `P-256` (WebCrypto)
-- **Signing**: ECDSA-SHA256 over canonical JSON (sorted keys, no whitespace)
-- **Compact payload**: 84 bytes with raw (r‖s) signature format for SMS transport
+| Variable | Description |
+| --- | --- |
+| `PORT` | The port the Express server listens on (default: `3000`). |
+| `DATABASE_URL` | The PostgreSQL connection string. |
+| `BANK_PRIVATE_KEY_PATH` | Path to the bank's ECDSA private key. Used to sign consumer certificates. |
+| `BANK_PUBLIC_KEY_PATH` | Path to the bank's ECDSA public key. |
+| `POSTHOG_API_KEY` | Your PostHog API key for tracking events (e.g., `WALLET_REGISTERED`, `TX_SETTLED`). |
+| `DASHBOARD_API_KEY` | Shared secret header (`X-Dashboard-Key`) to authorize the React Admin Dashboard to hit the analytics summary endpoints. |
+
+*(Note: Security caps like `MAX_OFFLINE_TX_AMOUNT` (₹200) and `MAX_OFFLINE_CUMULATIVE` (₹500) are hardcoded in `src/config/index.ts` intentionally, to prevent environment tampering.)*
+
+## Quick Start
+
+1. **Start the database:**
+   ```bash
+   docker-compose up -d postgres
+   ```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Run database migrations:**
+   Applies the schema (wallets, certificates, escrow_ledger, wallet_exposure, settlement_batches, settled_transactions).
+   ```bash
+   npm run db:migrate
+   ```
+4. **Generate the Bank Keypair:**
+   If this is your first run, you must generate the ECDSA prime256v1 (P-256) master keys. The server cannot issue certificates without them.
+   ```bash
+   npx ts-node scripts/generate-bank-keys.ts
+   ```
+5. **Start the server:**
+   ```bash
+   npm run dev
+   ```
+
+*(To run the integration test suite, execute `npm run test` while the database is running).*
+
+## Core API Endpoints
+
+### 1. Register a Wallet
+Registers a consumer's ECDSA public key.
+```bash
+curl -X POST http://localhost:3000/api/v1/wallet/register \
+  -H "Content-Type: application/json" \
+  -d '{"public_key": "<base64 SPKI DER public key>"}'
+```
+
+### 2. Load Funds / Issue Certificate
+Debits the liquid account and issues an offline signed certificate valid up to ₹500 cumulative exposure.
+```bash
+curl -X POST http://localhost:3000/api/v1/wallet/CL-VAULT-1234/load \
+  -H "Content-Type: application/json" \
+  -d '{"amount": 500}'
+```
+
+### 3. Settle a Batch
+Accepts an encrypted offline transaction batch from a merchant, validates all signatures and sequences, and updates exposure using row-level locking.
+```bash
+curl -X POST http://localhost:3000/api/v1/settle \
+  -H "Content-Type: application/json" \
+  -d '{
+        "merchant_id": "MERCH-01",
+        "transactions": [
+          {
+            "wallet_id": "CL-VAULT-1234",
+            "amount": 150,
+            "sequence_counter": 1,
+            "timestamp": 1718800000,
+            "signature": "<base64 ECDSA signature>"
+          }
+        ]
+      }'
+```
+
+## Analytics Endpoints
+
+The server exposes internal endpoints for the CryptiLink Dashboard. All require the `X-Dashboard-Key` header.
+
+### 4. System Summary
+```bash
+curl -H "X-Dashboard-Key: your_dashboard_secret_key" http://localhost:3000/api/v1/analytics/summary
+```
+
+### 5. Recent Transactions
+```bash
+curl -H "X-Dashboard-Key: your_dashboard_secret_key" http://localhost:3000/api/v1/analytics/recent-transactions?limit=20
+```
+
+### 6. Channel Statistics
+```bash
+curl -H "X-Dashboard-Key: your_dashboard_secret_key" http://localhost:3000/api/v1/analytics/channel-stats
+```
