@@ -12,7 +12,7 @@ CryptiLink offers a hardware-independent paradigm shift for offline transactions
 
 | Criterion | UPI Lite X | Screen-Scraping (e.g., FlowPay) | CryptiLink |
 | :--- | :--- | :--- | :--- |
-| **Consumer Hardware Requirement** | NFC-enabled device mandatory | Standard smartphone | Standard smartphone (Camera + Mic/Speaker or GSM SIM) |
+| **Consumer Hardware Requirement** | NFC-enabled device mandatory | Standard smartphone | Standard smartphone (Camera + Mic/Speaker or GSM SIM)\* |
 | **Merchant Hardware Requirement** | NFC reader terminal / smart soundbox | Varies (often requires active data connection) | Standard smartphone (Mic/Speaker or GSM SIM) |
 | **Works with Printed Paper QR** | No | Yes | **Yes** |
 | **Transport Mechanism** | Near Field Communication (NFC) | USSD / IVR / SMS automation | Dual-channel: Binary SMS (primary) & Acoustic FSK (fallback) |
@@ -24,6 +24,8 @@ CryptiLink offers a hardware-independent paradigm shift for offline transactions
 | **Data Transmitted Per Transaction** | Full ISO8583 / APDU payloads | Full text SMS / USSD payloads | Compact 84-byte binary payload (single SMS PDU frame) |
 | **Settlement Mechanism** | Synchronized upon reconnection | Screen-scraped balance updates | Asynchronous batch upload upon network reconnection |
 | **Regulatory Status** | Fully RBI & NPCI sanctioned | Regulatory grey area / Unauthorized | Seeking RBI Sandbox testing authorization |
+
+\* *Native Keystore signing bridge is a planned Phase 2 completion item. Current prototype demonstrates the signing protocol via the settlement engine and merchant verification layer.*
 
 ## Section 3: Risk Disclosure
 

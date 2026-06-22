@@ -29,6 +29,22 @@ CryptiLink is an offline digital payment protocol built to solve the synchronous
 *   **Merchant App:** Receives the air-gapped payload, performs full cryptographic signature verification, sequence replay checks, and certificate expiry checks completely offline in under 200 milliseconds.
 *   **Bank Server:** Acts as the ultimate root of trust by signing initial offline certificates, and processes asynchronous merchant batch settlements using strict row-level database locking to enforce exposure caps.
 
+## Current Build Status
+
+| Component | Status |
+|-----------|--------|
+| Bank Server (Phase 1) — cert issuance, settlement, cap enforcement | ✅ Complete |
+| Consumer App — UI shell (splash, dashboard, transmission screen) | ✅ Complete |
+| Consumer App — Native Keystore signing (CryptiLinkKeyEngine.kt) | ❌ Not built — see Roadmap |
+| Consumer App — Vision Camera QR scanner | ❌ Not built — see Roadmap |
+| Consumer App — On-device cap enforcement UI | ❌ Not built — see Roadmap |
+| Transport Layer — SMS channel (SecureSignalingTransport.kt) | ✅ Complete |
+| Transport Layer — Acoustic FSK modem (UltrasoundModem.kt) | ✅ Complete |
+| Merchant App — 4-check offline verifier | ✅ Complete |
+| Merchant App — Settlement batch upload | ✅ Complete |
+| Admin Dashboard (Phase 5) | ✅ Complete |
+| Regulatory docs + RBI pitch layer | ✅ Complete |
+
 ---
 
 ## Technical Highlights
@@ -95,8 +111,14 @@ Furthermore, the transport mechanisms carry explicit hardware dependencies. The 
 
 ## Roadmap
 
-The current implementation is a functional prototype. If authorized for expansion, Phase 6 (Future Work) would include:
-*   **Android Keystore StrongBox integration:** Implementing the JNI/Kotlin bridge for hardware-isolated ECDSA key generation so the private key never leaves the secure enclave (currently aspirational).
+The current implementation is a functional prototype. If authorized for expansion, Phase 6 (Future Work) and Phase 2 backlog would include:
+
+**Phase 2 Incomplete — Priority items for next sprint:**
+*   **Android Keystore StrongBox integration:** Implementing the JNI/Kotlin bridge for hardware-isolated ECDSA key generation so the private key never leaves the secure enclave.
+*   **Vision Camera QR scanner:** Building the consumer entry point for scanning static paper QRs.
+*   **On-device cap enforcement UI:** Adding pre-signing UI blocks for transactions exceeding the offline caps.
+
+**Phase 6 (Future Work):**
 *   **EMV-compatible kernel integration:** For stronger merchant-side cryptographic guarantees.
 *   **iOS Secure Enclave parity:** Expanding the hardware root of trust beyond the current Android-only implementation.
 *   **NPCI API integration:** Hooking the settlement engine directly into live banking ledgers (replacing the current mock server DB).
