@@ -1,5 +1,5 @@
 {
-  "name": "@paysys/shared",
+  "name": "@cryptilink/shared",
   "private": true,
   "version": "0.0.0",
   "main": "index.ts",

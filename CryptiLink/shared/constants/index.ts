@@ -6,8 +6,8 @@ export const ROUTES = {
 };
 
 export const STORAGE_KEYS = {
-  APP_STATE: 'paysys:state',
-  SESSION: 'paysys:session',
+  APP_STATE: 'cryptilink:state',
+  SESSION: 'cryptilink:session',
 };
 
 export const NETWORK = {

@@ -123,7 +123,7 @@ RISK-010 - CryptiLink-required Zustand stores were missing.
 - `CryptiLink/docs/phase-0.5/REMEDIATION_LOG.md`
 - `CryptiLink/docs/phase-0.5/UPDATED_RISK_REGISTER.md`
 - `CryptiLink/docs/phase-0.5/PHASE_0.5_COMPLETION_REPORT.md`
-- `CryptiLink/tsconfig.paysys.json` - dedicated strict type-check config for the CryptiLink workspace.
+- `CryptiLink/tsconfig.cryptilink.json` - dedicated strict type-check config for the CryptiLink workspace.
 
 ## Files Modified
 

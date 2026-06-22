@@ -1,5 +1,5 @@
 {
-  "name": "paysys",
+  "name": "cryptilink",
   "private": true,
   "version": "0.0.0",
   "workspaces": [
@@ -27,7 +27,7 @@
     "lint": "npx eslint . --ext .js,.ts,.tsx --no-error-on-unmatched-pattern",
     "format": "npx prettier --check .",
     "format:check": "npx prettier --check .",
-    "type-check": "npx tsc -p tsconfig.paysys.json --noEmit",
+    "type-check": "npx tsc -p tsconfig.cryptilink.json --noEmit",
     "verify": "bash ./scripts/verify.sh && npm run lint && npm run format",
     "verify:phase1": "node scripts/verify-phase-1.js && npm run lint && npm run depcruise",
     "depcruise": "depcruise --config .dependency-cruiser.js mobile",
