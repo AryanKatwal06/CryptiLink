@@ -1,16 +1,16 @@
-# PaySys
+# CryptiLink
 
-This repository contains the PaySys workspace for the secure wallet foundation. It is organized as a single monorepo with a mobile app, backend services, shared contracts, infrastructure scaffolding, and the scripts used to validate each phase.
+This repository contains the CryptiLink workspace for the secure wallet foundation. It is organized as a single monorepo with a mobile app, backend services, shared contracts, infrastructure scaffolding, and the scripts used to validate each phase.
 
 ## Repository Layout
 
-- `PaySys/mobile/` React Native mobile app
-- `PaySys/backend/` Spring Boot backend and service modules
-- `PaySys/shared/` shared TypeScript contracts and types
-- `PaySys/scripts/` setup, verification, and environment helpers
-- `PaySys/docs/` architecture notes, phase reports, and standards
-- `PaySys/docker/` container build files
-- `PaySys/infra/` infrastructure placeholders and environment-specific assets
+- `CryptiLink/mobile/` React Native mobile app
+- `CryptiLink/backend/` Spring Boot backend and service modules
+- `CryptiLink/shared/` shared TypeScript contracts and types
+- `CryptiLink/scripts/` setup, verification, and environment helpers
+- `CryptiLink/docs/` architecture notes, phase reports, and standards
+- `CryptiLink/docker/` container build files
+- `CryptiLink/infra/` infrastructure placeholders and environment-specific assets
 
 ## Prerequisites
 
@@ -31,8 +31,8 @@ npm run dev
 
 If you work directly inside the workspace folder, copy the example environment files before running any app or service commands:
 
-- `PaySys/.env.example` to `PaySys/.env`
-- `PaySys/backend/.env.example` to `PaySys/backend/.env` if you need backend-specific overrides
+- `CryptiLink/.env.example` to `CryptiLink/.env`
+- `CryptiLink/backend/.env.example` to `CryptiLink/backend/.env` if you need backend-specific overrides
 
 Never commit real secrets, local keystores, or generated build output.
 

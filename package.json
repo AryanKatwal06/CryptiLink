@@ -3,18 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "workspaces": [
-    "PaySys"
+    "CryptiLink"
   ],
   "scripts": {
-    "prepare": "npm --prefix PaySys run prepare",
-    "dev": "npm --prefix PaySys run dev",
-    "build": "npm --prefix PaySys run build",
-    "test": "npm --prefix PaySys run test",
-    "clean": "npm --prefix PaySys run clean",
-    "lint": "npm --prefix PaySys run lint",
-    "format": "npm --prefix PaySys run format",
-    "verify": "npm --prefix PaySys run verify",
-    "setup": "npm --prefix PaySys run setup"
+    "prepare": "npm --prefix CryptiLink run prepare",
+    "dev": "npm --prefix CryptiLink run dev",
+    "build": "npm --prefix CryptiLink run build",
+    "test": "npm --prefix CryptiLink run test",
+    "clean": "npm --prefix CryptiLink run clean",
+    "lint": "npm --prefix CryptiLink run lint",
+    "format": "npm --prefix CryptiLink run format",
+    "verify": "npm --prefix CryptiLink run verify",
+    "setup": "npm --prefix CryptiLink run setup"
   },
   "devDependencies": {
     "typescript": "5.1.6"
