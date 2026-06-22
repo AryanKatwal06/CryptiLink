@@ -16,11 +16,11 @@ def readEnvValue = { String key ->
 }
 
 android {
-    namespace 'com.paysys.app'
+    namespace 'com.cryptilink.app'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.paysys.app"
+        applicationId "com.cryptilink.app"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -38,7 +38,7 @@ android {
 
     signingConfigs {
         release {
-            def keystoreFileName = readEnvValue('ANDROID_KEYSTORE_FILE') ?: 'paysys-release.keystore'
+            def keystoreFileName = readEnvValue('ANDROID_KEYSTORE_FILE') ?: 'cryptilink-release.keystore'
             def releaseStorePassword = readEnvValue('ANDROID_STORE_PASSWORD')
             def releaseKeyAlias = readEnvValue('ANDROID_KEY_ALIAS')
             def releaseKeyPassword = readEnvValue('ANDROID_KEY_PASSWORD')
@@ -61,11 +61,5 @@ android {
 
 dependencies {
     implementation 'com.facebook.react:react-android:0.74.5'
-    implementation project(':react-native-config')
 }
 
-// react-native-config dotenv integration (conditional)
-def dotenvGradle = new File(project(':react-native-config').projectDir, 'dotenv.gradle')
-if (dotenvGradle.exists()) {
-    apply from: dotenvGradle
-}

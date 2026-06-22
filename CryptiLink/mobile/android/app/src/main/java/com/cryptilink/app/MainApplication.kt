@@ -1,10 +1,11 @@
-package com.paysys.app
+package com.cryptilink.app
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
+import com.cryptilink.bridge.CryptiLinkTransportPackage
 import com.facebook.react.shell.MainReactPackage
 import com.facebook.soloader.SoLoader
 import java.util.*
@@ -16,7 +17,10 @@ class MainApplication : Application(), ReactApplication {
         }
 
         override fun getPackages(): List<ReactPackage> {
-            return Arrays.asList<ReactPackage>(MainReactPackage())
+            return Arrays.asList<ReactPackage>(
+                MainReactPackage(),
+                CryptiLinkTransportPackage()
+            )
         }
 
         override fun getJSMainModuleName(): String {

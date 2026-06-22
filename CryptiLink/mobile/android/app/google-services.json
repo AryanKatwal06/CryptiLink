@@ -1,21 +1,21 @@
 {
   "project_info": {
     "project_number": "395660058639",
-    "project_id": "paysys-c3395",
-    "storage_bucket": "paysys-c3395.firebasestorage.app"
+    "project_id": "cryptilink-c3395",
+    "storage_bucket": "cryptilink-c3395.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:395660058639:android:421f699e38e962437a437a",
         "android_client_info": {
-          "package_name": "com.paysys.app"
+          "package_name": "com.cryptilink.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "REDACTED_FIREBASE_API_KEY"
+          "current_key": "YOUR_API_KEY_HERE"
         }
       ],
       "services": {

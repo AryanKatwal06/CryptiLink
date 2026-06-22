@@ -1,4 +1,4 @@
-package com.paysys.app
+package com.cryptilink.app
 
 import com.facebook.react.ReactActivity
 

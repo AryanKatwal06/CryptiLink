@@ -1,5 +1,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Phase 3: SMS Transport Channel (primary) -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- Phase 4: Inbound SMS receiving for merchant-side transaction payloads -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <!-- Phase 3: Acoustic Transport Channel (fallback) -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Phase 4: Haptic feedback for verification/settlement events -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Phase 4: Network state detection for settlement batch upload -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MainApplication"
         android:label="CryptiLink"
@@ -12,6 +29,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Phase 4: SMS BroadcastReceiver for inbound CryptiLink payloads -->
+        <receiver
+            android:name="com.cryptilink.bridge.SmsReceiverModule"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter android:priority="999">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
