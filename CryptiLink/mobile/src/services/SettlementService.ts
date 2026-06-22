@@ -58,7 +58,7 @@ interface SettlementState {
   lastResult: SettlementResponse | null;
 }
 
-let state: SettlementState = {
+const state: SettlementState = {
   isSubmitting: false,
   lastSubmissionTime: null,
   lastBatchId: null,

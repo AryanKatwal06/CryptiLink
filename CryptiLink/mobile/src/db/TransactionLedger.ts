@@ -173,7 +173,7 @@ export async function applySettlementResults(
 }> {
   let settled = 0;
   let rejected = 0;
-  let skipped = 0;
+  const skipped = 0;
 
   for (const result of results) {
     if (result.accepted) {

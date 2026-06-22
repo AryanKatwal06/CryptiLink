@@ -164,7 +164,7 @@ export const ListeningScreen: React.FC<ListeningScreenProps> = ({ navigation }) 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      stopListening().catch(() => {});
+      stopListening().catch(() => { /* ignore */ });
     };
   }, []);
 

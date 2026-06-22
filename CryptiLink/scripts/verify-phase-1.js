@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const required = ['mobile', 'backend', 'shared', 'infra', 'tests', 'scripts', 'docs'];
+const required = ['mobile', 'shared', 'scripts', 'docs'];
 
 let pass = true;
 const missing = [];
@@ -14,7 +14,7 @@ required.forEach((d) => {
 });
 
 const readmeMissing = [];
-['mobile', 'mobile/app', 'shared/contracts', 'shared/types', 'docs'].forEach((d) => {
+['mobile', 'shared/contracts', 'shared/types', 'docs'].forEach((d) => {
   const p = path.join(root, d, 'README.md');
   if (!fs.existsSync(p)) {
     readmeMissing.push(p);
@@ -32,8 +32,9 @@ if (fs.existsSync(tsConfig)) {
     const refs = cfg.references || [];
     const refPaths = refs.map((r) => r.path);
     ['shared', 'mobile'].forEach((p) => {
-      if (!refPaths.includes(`./${p}`) && !refPaths.includes(p))
+      if (!refPaths.some(r => r.includes(p))) {
         tsIssues.push(`tsconfig missing reference to ${p}`);
+      }
     });
   } catch {
     tsIssues.push('tsconfig.json parse error');

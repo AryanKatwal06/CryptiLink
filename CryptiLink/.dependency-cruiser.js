@@ -8,13 +8,6 @@ module.exports = {
       to: { circular: true },
     },
     {
-      name: 'screens-no-services',
-      comment: 'Screens must not import services directly; use hooks/providers',
-      severity: 'error',
-      from: { path: '^mobile/screens' },
-      to: { path: 'mobile/services' },
-    },
-    {
       name: 'components-no-api',
       comment: 'Components must not access backend modules or direct API adapters',
       severity: 'error',

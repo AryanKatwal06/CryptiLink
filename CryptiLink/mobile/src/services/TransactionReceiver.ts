@@ -90,7 +90,7 @@ export function initializeReceivers(): void {
  *
  * @param activateAcoustic - Whether to also start acoustic listening
  */
-export async function startListening(activateAcoustic: boolean = false): Promise<void> {
+export async function startListening(activateAcoustic = false): Promise<void> {
   // Subscribe to native events if not already subscribed
   if (subscriptions.length === 0) {
     if (smsEmitter) {
