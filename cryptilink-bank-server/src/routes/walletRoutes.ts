@@ -8,6 +8,8 @@ import { Router, Request, Response } from 'express';
 import { registerWallet } from '../services/walletService';
 import { loadFundsAndIssueCertificate } from '../services/certificateService';
 import { MAX_OFFLINE_CUMULATIVE } from '../config';
+import { trackWalletRegistered, trackCertIssued } from '../analytics/track';
+import { hashWalletId } from '../crypto/compactPayload';
 
 const router = Router();
 
@@ -40,7 +42,7 @@ router.post('/register', async (req: Request, res: Response) => {
     }
 
     const result = await registerWallet(public_key);
-
+    trackWalletRegistered(hashWalletId(result.wallet_id));
     res.status(201).json(result);
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
@@ -80,6 +82,7 @@ router.post('/:walletId/load', async (req: Request, res: Response) => {
     }
 
     const result = await loadFundsAndIssueCertificate(walletId, amount);
+    trackCertIssued(hashWalletId(walletId), amount, result.certificate.expiry);
 
     res.status(201).json({
       certificate: result.certificate,

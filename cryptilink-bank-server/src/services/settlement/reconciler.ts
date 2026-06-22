@@ -20,6 +20,8 @@ import {
   TransactionResult,
 } from '../../types/settlement';
 import { validateTransaction, ValidationContext } from './validator';
+import { trackSettlementBatchReceived, trackTxSettled, trackTxRejected, RejectionReason } from '../../analytics/track';
+import { hashWalletId } from '../../crypto/compactPayload';
 
 /**
  * Processes a complete settlement batch from a merchant.
@@ -79,9 +81,9 @@ export async function processSettlementBatch(
           // Record the rejected transaction
           await client.query(
             `INSERT INTO settled_transactions
-             (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason)
-             VALUES ($1, $2, $3, $4, $5, $6, FALSE, $7)`,
-            [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, 'WALLET_NOT_FOUND']
+             (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason, channel_hint, settlement_latency_ms)
+             VALUES ($1, $2, $3, $4, $5, $6, FALSE, $7, $8, $9)`,
+            [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, 'WALLET_NOT_FOUND', (tx as any).channel_hint || null, null]
           );
           continue;
         }
@@ -98,9 +100,9 @@ export async function processSettlementBatch(
           });
           await client.query(
             `INSERT INTO settled_transactions
-             (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason)
-             VALUES ($1, $2, $3, $4, $5, $6, FALSE, $7)`,
-            [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, 'WALLET_SUSPENDED']
+             (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason, channel_hint, settlement_latency_ms)
+             VALUES ($1, $2, $3, $4, $5, $6, FALSE, $7, $8, $9)`,
+            [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, 'WALLET_SUSPENDED', (tx as any).channel_hint || null, null]
           );
           continue;
         }
@@ -126,9 +128,9 @@ export async function processSettlementBatch(
           });
           await client.query(
             `INSERT INTO settled_transactions
-             (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason)
-             VALUES ($1, $2, $3, $4, $5, $6, FALSE, $7)`,
-            [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, 'WALLET_NOT_FOUND']
+             (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason, channel_hint, settlement_latency_ms)
+             VALUES ($1, $2, $3, $4, $5, $6, FALSE, $7, $8, $9)`,
+            [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, 'WALLET_NOT_FOUND', (tx as any).channel_hint || null, null]
           );
           continue;
         }
@@ -156,9 +158,9 @@ export async function processSettlementBatch(
           });
           await client.query(
             `INSERT INTO settled_transactions
-             (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason)
-             VALUES ($1, $2, $3, $4, $5, $6, FALSE, $7)`,
-            [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, 'CERTIFICATE_NOT_FOUND']
+             (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason, channel_hint, settlement_latency_ms)
+             VALUES ($1, $2, $3, $4, $5, $6, FALSE, $7, $8, $9)`,
+            [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, 'CERTIFICATE_NOT_FOUND', (tx as any).channel_hint || null, null]
           );
           continue;
         }
@@ -186,9 +188,9 @@ export async function processSettlementBatch(
           });
           await client.query(
             `INSERT INTO settled_transactions
-             (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason)
-             VALUES ($1, $2, $3, $4, $5, $6, FALSE, $7)`,
-            [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, validationResult.reason]
+             (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason, channel_hint, settlement_latency_ms)
+             VALUES ($1, $2, $3, $4, $5, $6, FALSE, $7, $8, $9)`,
+            [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, validationResult.reason, (tx as any).channel_hint || null, null]
           );
           continue;
         }
@@ -219,9 +221,9 @@ export async function processSettlementBatch(
         // Record the verified transaction
         await client.query(
           `INSERT INTO settled_transactions
-           (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason)
-           VALUES ($1, $2, $3, $4, $5, $6, TRUE, NULL)`,
-          [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp]
+           (batch_id, wallet_id, amount, sequence_counter, consumer_signature, timestamp, verified, rejected_reason, channel_hint, settlement_latency_ms)
+           VALUES ($1, $2, $3, $4, $5, $6, TRUE, NULL, $7, $8)`,
+          [batchId, tx.wallet_id, tx.amount, tx.sequence_counter, tx.signature, tx.timestamp, (tx as any).channel_hint || null, Date.now() - (tx.timestamp * 1000)]
         );
 
         results.push({
@@ -260,6 +262,21 @@ export async function processSettlementBatch(
   // ── Build summary ─────────────────────────────────────────────────
   const accepted = results.filter(r => r.accepted);
   const rejected = results.filter(r => !r.accepted);
+
+  const totalAmount = batch.transactions.reduce((sum, tx) => sum + tx.amount, 0);
+  trackSettlementBatchReceived(batch.merchant_id, batch.transactions.length, totalAmount);
+
+  batch.transactions.forEach((tx, idx) => {
+    const result = results.find(r => r.index === idx);
+    if (!result) return;
+    const walletHash = hashWalletId(tx.wallet_id);
+    if (result.accepted) {
+      const latency = Date.now() - (tx.timestamp * 1000);
+      trackTxSettled(walletHash, tx.amount, (tx as any).channel_hint, latency);
+    } else if (result.rejected_reason) {
+      trackTxRejected(walletHash, tx.amount, result.rejected_reason as RejectionReason);
+    }
+  });
 
   return {
     batch_id: batchId,

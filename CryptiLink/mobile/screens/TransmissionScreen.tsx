@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Vibration, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { sendPayload, subscribeToChannelEvents } from '../services/CryptiLinkTransport';
+import { trackTxTransmitted } from '../services/analytics';
 
 type ChannelStatus = 'idle' | 'attempting' | 'success' | 'failed';
 
@@ -32,10 +33,31 @@ export default function TransmissionScreen() {
   const [activeChannel, setActiveChannel] = useState<'sms' | 'acoustic' | null>(null);
 
   useEffect(() => {
+    const transmissionStartTimes: Record<string, number> = {};
+
+    const startSms = () => {
+      transmissionStartTimes['sms'] = Date.now();
+      setActiveChannel('sms');
+      setSmsStatus('attempting');
+      sendPayload('sms', signedPayload);
+    };
+
+    const startAcoustic = () => {
+      transmissionStartTimes['acoustic'] = Date.now();
+      setActiveChannel('acoustic');
+      setAcousticStatus('attempting');
+      
+      setTimeout(() => {
+        sendPayload('acoustic', signedPayload);
+      }, 150);
+    };
+
     const unsubscribe = subscribeToChannelEvents((event: { channel: string; status: ChannelStatus }) => {
       if (event.channel === 'sms') {
         setSmsStatus(event.status);
         if (event.status === 'success') {
+          const duration = Date.now() - (transmissionStartTimes['sms'] || Date.now());
+          trackTxTransmitted('sms', Number(amount) || 0, duration);
           Vibration.vibrate(50);
           setActiveChannel(null);
         } else if (event.status === 'failed') {
@@ -44,8 +66,12 @@ export default function TransmissionScreen() {
       } else if (event.channel === 'acoustic') {
         setAcousticStatus(event.status);
         if (event.status === 'success') {
+          const duration = Date.now() - (transmissionStartTimes['acoustic'] || Date.now());
+          trackTxTransmitted('acoustic', Number(amount) || 0, duration);
           setActiveChannel(null);
         } else if (event.status === 'failed') {
+          const duration = Date.now() - (transmissionStartTimes['acoustic'] || Date.now());
+          trackTxTransmitted('failed', Number(amount) || 0, duration);
           setActiveChannel(null);
           Vibration.vibrate([0, 50, 100, 50, 100, 50]);
         }
@@ -57,25 +83,13 @@ export default function TransmissionScreen() {
     return () => unsubscribe();
   }, []);
 
-  const startSms = () => {
-    setActiveChannel('sms');
-    setSmsStatus('attempting');
-    sendPayload('sms', signedPayload);
-  };
-
-  const startAcoustic = () => {
-    setActiveChannel('acoustic');
-    setAcousticStatus('attempting');
-    
-    setTimeout(() => {
-      sendPayload('acoustic', signedPayload);
-    }, 150);
-  };
 
   const handleRetry = () => {
     setSmsStatus('idle');
     setAcousticStatus('idle');
-    startSms();
+    setActiveChannel('sms');
+    setSmsStatus('attempting');
+    sendPayload('sms', signedPayload);
   };
 
   const renderStatus = () => {

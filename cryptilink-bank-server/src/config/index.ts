@@ -50,4 +50,6 @@ export const config = {
   databaseUrl: process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/cryptilink',
   bankPrivateKeyPath: path.resolve(process.env.BANK_PRIVATE_KEY_PATH || './keys/bank_private.pem'),
   bankPublicKeyPath: path.resolve(process.env.BANK_PUBLIC_KEY_PATH || './keys/bank_public.pem'),
+  posthogApiKey: process.env.POSTHOG_API_KEY || '',
 };
+export default config;
