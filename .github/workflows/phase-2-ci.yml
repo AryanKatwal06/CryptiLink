@@ -3,10 +3,10 @@ name: Phase 2 CI - Mobile Verification
 on:
   push:
     paths:
-      - "PaySys/**"
+      - "CryptiLink/**"
   pull_request:
     paths:
-      - "PaySys/**"
+      - "CryptiLink/**"
 
 concurrency:
   group: phase-2-ci
@@ -30,24 +30,24 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      - name: Install dependencies (PaySys)
+      - name: Install dependencies (CryptiLink)
         run: npm ci
-        working-directory: PaySys
+        working-directory: CryptiLink
 
       - name: Run dependency-cruiser
         run: npm run depcruise
-        working-directory: PaySys
+        working-directory: CryptiLink
 
       - name: Run mobile smoke tests
         run: npm run test:mobile:smoke
-        working-directory: PaySys
+        working-directory: CryptiLink
 
       - name: Run Phase 2 verification script
         run: npm run verify:phase2
-        working-directory: PaySys
+        working-directory: CryptiLink
 
       - name: Upload Phase 2 report
         uses: actions/upload-artifact@v4
         with:
           name: phase-2-report
-          path: PaySys/mobile/docs/phase-2-report.md
+          path: CryptiLink/mobile/docs/phase-2-report.md

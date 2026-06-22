@@ -30,9 +30,9 @@ pnpm-debug.log*
 .env
 .env.*
 !*.env.example
-PaySys/**/.env
-PaySys/**/.env.*
-!PaySys/**/.env.example
+CryptiLink/**/.env
+CryptiLink/**/.env.*
+!CryptiLink/**/.env.example
 secrets*
 *.pem
 *.key
@@ -41,31 +41,33 @@ secrets*
 *.p12
 *.mobileprovision
 
-# PaySys workspace artifacts
-PaySys/.gha/
-PaySys/.DS_Store
-PaySys/coverage/
-PaySys/logs/
-PaySys/*.log
-PaySys/node_modules/
-PaySys/**/node_modules/
-PaySys/**/build/
-PaySys/**/.gradle/
-PaySys/backend/target/
-PaySys/mobile/android/.cxx/
-PaySys/mobile/android/local.properties
-PaySys/mobile/android/app/build/
-PaySys/mobile/android/build/
-PaySys/mobile/android/*.keystore
-PaySys/mobile/android/app/*.keystore
-PaySys/mobile/ios/Pods/
-PaySys/mobile/ios/DerivedData/
-PaySys/mobile/ios/build/
-PaySys/mobile/ios/GoogleService-Info.plist
-PaySys/mobile/ios/GoogleService-Info-*.plist
+# CryptiLink workspace artifacts
+CryptiLink/.gha/
+CryptiLink/.DS_Store
+CryptiLink/coverage/
+CryptiLink/logs/
+CryptiLink/*.log
+CryptiLink/node_modules/
+CryptiLink/**/node_modules/
+CryptiLink/**/build/
+CryptiLink/**/.gradle/
+CryptiLink/backend/target/
+CryptiLink/mobile/android/.cxx/
+CryptiLink/mobile/android/local.properties
+CryptiLink/mobile/android/app/build/
+CryptiLink/mobile/android/build/
+CryptiLink/mobile/android/*.keystore
+CryptiLink/mobile/android/app/*.keystore
+CryptiLink/mobile/ios/Pods/
+CryptiLink/mobile/ios/DerivedData/
+CryptiLink/mobile/ios/build/
+CryptiLink/mobile/ios/GoogleService-Info.plist
+CryptiLink/mobile/ios/GoogleService-Info-*.plist
 
 # Compose and local runtime overrides
 docker-compose.override.yml
 docker-compose.*.yml
 /.venv
 /.python-version
+grep_output.txt
+cryptilink_rename_and_audit_prompt.md

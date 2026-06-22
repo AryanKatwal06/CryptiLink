@@ -21,21 +21,21 @@ jobs:
           node-version: "20"
       - name: Install dependencies
         run: |
-          cd PaySys
+          cd CryptiLink
           npm ci || npm install
       - name: Validate docker-compose
         run: |
-          cd PaySys
+          cd CryptiLink
           docker compose config || echo "docker not available"
       - name: Lint
         run: |
-          cd PaySys
+          cd CryptiLink
           npm run lint || echo "No lint configured"
       - name: Format check
         run: |
-          cd PaySys
+          cd CryptiLink
           npm run format || echo "No format configured"
       - name: Build
         run: |
-          cd PaySys
+          cd CryptiLink
           npm run build || echo "No build configured"
