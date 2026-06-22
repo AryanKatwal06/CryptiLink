@@ -1,1 +1,0 @@
--- Baseline migration for the PaySys backend foundation.
