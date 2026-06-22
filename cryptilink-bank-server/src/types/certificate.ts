@@ -38,7 +38,11 @@ export interface SignedCertificate extends CertificatePayload {
  * across all platforms (Node.js, Android, iOS) that verify certificates.
  */
 export function canonicalizeCertificate(payload: CertificatePayload): string {
-  // Explicitly construct with sorted keys to guarantee order
+  // WARNING: Key order is insertion-order dependent (ES2015+).
+  // Do NOT add, remove, or reorder fields in this object
+  // without regenerating all existing certificates.
+  // A production implementation should use explicit sort:
+  // Object.keys(payload).sort().reduce(...)
   const canonical = {
     expiry: payload.expiry,
     max_offline_limit: payload.max_offline_limit,

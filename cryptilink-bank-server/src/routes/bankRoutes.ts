@@ -6,7 +6,7 @@
  */
 
 import { Router, Request, Response } from 'express';
-import { getBankPublicKeyPem } from '../crypto/bankKeys';
+import { getBankPublicKeyBase64 } from '../crypto/bankKeys';
 
 const router = Router();
 
@@ -18,7 +18,7 @@ const router = Router();
  */
 router.get('/public-key', (_req: Request, res: Response) => {
   try {
-    const publicKeyPem = getBankPublicKeyPem();
+    const publicKeyPem = getBankPublicKeyBase64();
     res.json({
       public_key: publicKeyPem,
       algorithm: 'ECDSA',

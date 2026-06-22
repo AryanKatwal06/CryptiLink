@@ -57,7 +57,7 @@ export type RejectionReason =
   | 'EXCEEDS_PER_TX_CAP'
   | 'EXCEEDS_CUMULATIVE_EXPOSURE_CAP'
   | 'REPLAY_ATTACK_DETECTED'
-  | 'EXPIRED_CERTIFICATE'
+  | 'CERTIFICATE_EXPIRED'
   | 'INVALID_SIGNATURE';
 
 export const trackTxRejected = (walletIdHash: string, amount: number, rejectionReason: RejectionReason) => {

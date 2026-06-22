@@ -139,10 +139,13 @@ export async function processSettlementBatch(
 
         // ── Load the wallet's active (non-revoked, non-expired) certificate
         const certResult = await client.query<{
+          version: number;
+          max_offline_limit: string;
+          bank_signature: string;
           expiry_timestamp: string;
           revoked: boolean;
         }>(
-          `SELECT expiry_timestamp, revoked FROM certificates
+          `SELECT 1 as version, max_offline_limit, bank_signature, expiry_timestamp, revoked FROM certificates
            WHERE wallet_id = $1 AND revoked = FALSE
            ORDER BY issued_at DESC LIMIT 1`,
           [tx.wallet_id]
@@ -174,6 +177,12 @@ export async function processSettlementBatch(
           lastSequenceCounter: exposure.last_sequence_counter,
           certificateExpiry: parseInt(cert.expiry_timestamp, 10),
           certificateRevoked: cert.revoked,
+          certificateData: {
+            version: cert.version,
+            wallet_id: tx.wallet_id,
+            max_offline_limit: parseFloat(cert.max_offline_limit),
+            bank_signature: cert.bank_signature,
+          },
         };
 
         const validationResult = validateTransaction(tx, ctx);

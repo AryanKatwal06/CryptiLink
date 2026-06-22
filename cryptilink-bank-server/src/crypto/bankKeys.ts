@@ -96,17 +96,11 @@ export function loadBankKeys(): void {
 
     console.log('[BANK KEYS] ✓ Loaded existing keypair from disk');
   } else {
-    console.warn('[BANK KEYS] ⚠ No keypair found on disk — generating new keypair');
-    console.warn('[BANK KEYS]   This is normal for first-time setup.');
-    console.warn('[BANK KEYS]   Run `npm run generate-keys` for explicit key generation.');
-
-    const { privateKeyPem, publicKeyPem } = generateBankKeyPair();
-    writeKeysToDisk(privateKeyPem, publicKeyPem);
-
-    bankPrivateKey = crypto.createPrivateKey(privateKeyPem);
-    bankPublicKey = crypto.createPublicKey(publicKeyPem);
-
-    console.log('[BANK KEYS] ✓ Generated and saved new keypair');
+    throw new Error(
+      '[BANK KEYS] ⚠ No keypair found on disk! ' +
+      'You must explicitly generate a keypair before starting the server. ' +
+      'Run `npx ts-node scripts/generate-bank-keys.ts`.'
+    );
   }
 
   // Verify the loaded key is on the correct curve
@@ -139,12 +133,13 @@ export function getBankPublicKey(): crypto.KeyObject {
 }
 
 /**
- * Returns the bank's public key as a PEM string.
+ * Returns the bank's public key as a base64-encoded DER string.
  * This is the value served by GET /api/v1/bank/public-key.
  */
-export function getBankPublicKeyPem(): string {
-  return getBankPublicKey().export({
+export function getBankPublicKeyBase64(): string {
+  const derBuffer = getBankPublicKey().export({
     type: 'spki',
-    format: 'pem',
-  }) as string;
+    format: 'der',
+  });
+  return derBuffer.toString('base64');
 }

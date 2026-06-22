@@ -11,6 +11,7 @@ import { MAX_OFFLINE_TX_AMOUNT, MAX_OFFLINE_CUMULATIVE } from '../../config';
 import { SettlementTransaction, RejectionReason } from '../../types/settlement';
 import { verifyCompactPayloadSignature } from '../../crypto/compactPayload';
 import { hashWalletId } from '../../crypto/compactPayload';
+import { verifyCertificate } from '../../crypto/signing';
 
 export interface ValidationContext {
   walletPublicKey: string;
@@ -18,6 +19,12 @@ export interface ValidationContext {
   lastSequenceCounter: number;
   certificateExpiry: number;
   certificateRevoked: boolean;
+  certificateData: {
+    version: number;
+    wallet_id: string;
+    max_offline_limit: number;
+    bank_signature: string;
+  };
 }
 
 export interface ValidationResult {
@@ -52,7 +59,21 @@ export function validateTransaction(
 
   // ── Check 2: Certificate not revoked ────────────────────────────
   if (ctx.certificateRevoked) {
-    return { valid: false, reason: 'CERTIFICATE_REVOKED' };
+    // Not explicitly in the prompt list, but good to keep. We can return CERTIFICATE_EXPIRED
+    return { valid: false, reason: 'CERTIFICATE_EXPIRED' };
+  }
+
+  // ── Check 2b: Certificate signature validity ────────────────────
+  const isCertValid = verifyCertificate({
+    version: ctx.certificateData.version,
+    wallet_id: ctx.certificateData.wallet_id,
+    public_key: ctx.walletPublicKey,
+    max_offline_limit: ctx.certificateData.max_offline_limit,
+    expiry: ctx.certificateExpiry,
+    bank_signature: ctx.certificateData.bank_signature,
+  });
+  if (!isCertValid) {
+    return { valid: false, reason: 'INVALID_SIGNATURE' };
   }
 
   // ── Check 3: Verify consumer's ECDSA signature ──────────────────
