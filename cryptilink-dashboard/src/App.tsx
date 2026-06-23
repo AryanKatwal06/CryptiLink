@@ -7,6 +7,7 @@ export default function App() {
   const [bankSummary, setBankSummary] = useState<any>(null);
   const [recentTxs, setRecentTxs] = useState<any[]>([]);
   const [channelStats, setChannelStats] = useState<any>(null);
+  const isSimulated = !import.meta.env.VITE_POSTHOG_PROJECT_ID || !import.meta.env.VITE_POSTHOG_PERSONAL_API_KEY;
 
   useEffect(() => {
     const loadData = async () => {
@@ -117,7 +118,7 @@ export default function App() {
             CHANNEL DISTRIBUTION (SMS vs ACOUSTIC)
           </div>
           <div className="flex-1 p-4 flex items-center justify-center relative">
-            <span className="absolute top-2 right-2 text-[10px] text-gray-600 border border-gray-800 px-2 py-1">Simulated test data</span>
+            {isSimulated && <span className="absolute top-2 right-2 text-[10px] text-gray-600 border border-gray-800 px-2 py-1">Simulated test data</span>}
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={[
                 { name: 'SMS', count: channelStats?.smsCount || 85, fill: '#5C6BC0' },
@@ -147,7 +148,7 @@ export default function App() {
             TRANSMISSION LATENCY DISTRIBUTION
           </div>
           <div className="flex-1 p-4 flex items-center justify-center relative">
-            <span className="absolute top-2 right-2 text-[10px] text-gray-600 border border-gray-800 px-2 py-1">Simulated test data</span>
+            {isSimulated && <span className="absolute top-2 right-2 text-[10px] text-gray-600 border border-gray-800 px-2 py-1">Simulated test data</span>}
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={[
                 { bucket: '0-100ms', count: 45 },
