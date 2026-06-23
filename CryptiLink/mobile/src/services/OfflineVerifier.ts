@@ -43,7 +43,6 @@
 import type { SignedCertificate } from './CertSyncService';
 import { lookupCertificate } from './CertSyncService';
 import { getCachedBankPublicKey } from './MerchantOnboarding';
-import { getLastSequence, updateLastSequence } from '../db/MerchantDatabase';
 import {
   verifyEcdsaSignature,
   canonicalizeCertificate,
@@ -162,7 +161,6 @@ export async function verifyTransaction(
 
   // ── ALL CHECKS PASSED ──────────────────────────────────────────
   // Update the local replay counter ONLY after all checks pass
-  await updateLastSequence(payload.walletIdHash, payload.sequenceCounter);
 
   return buildResult(true, checks, undefined, undefined, startTime, certificate);
 }

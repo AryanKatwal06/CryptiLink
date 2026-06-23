@@ -50,7 +50,7 @@ import {
  * @param tx - Transaction data from the verifier
  * @returns The inserted transaction's ID
  */
-export async function recordVerifiedTransaction(tx: {
+export async function recordVerifiedTransaction(txPayload: {
   walletIdHash: string;
   walletId: string | null;
   amount: number;
@@ -62,24 +62,40 @@ export async function recordVerifiedTransaction(tx: {
   verificationChecks: string;
 }): Promise<number> {
   const db = await getDatabase();
-  const [result] = await db.executeSql(
-    `INSERT INTO merchant_transactions
-     (wallet_id_hash, wallet_id, amount, sequence_counter, signature,
-      channel, timestamp, received_at, status, verification_checks)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'OFFLINE_VERIFIED', ?)`,
-    [
-      tx.walletIdHash,
-      tx.walletId,
-      tx.amount,
-      tx.sequenceCounter,
-      tx.signature,
-      tx.channel,
-      tx.timestamp,
-      tx.receivedAt,
-      tx.verificationChecks,
-    ],
-  );
-  return result.insertId;
+  let insertId = 0;
+
+  await db.transaction((tx) => {
+    // 1. Update the replay counter
+    tx.executeSql(
+      `INSERT OR REPLACE INTO replay_counters (wallet_id_hash, last_sequence)
+       VALUES (?, ?)`,
+      [txPayload.walletIdHash, txPayload.sequenceCounter],
+    );
+
+    // 2. Insert the ledger entry
+    tx.executeSql(
+      `INSERT INTO merchant_transactions
+       (wallet_id_hash, wallet_id, amount, sequence_counter, signature,
+        channel, timestamp, received_at, status, verification_checks)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'OFFLINE_VERIFIED', ?)`,
+      [
+        txPayload.walletIdHash,
+        txPayload.walletId,
+        txPayload.amount,
+        txPayload.sequenceCounter,
+        txPayload.signature,
+        txPayload.channel,
+        txPayload.timestamp,
+        txPayload.receivedAt,
+        txPayload.verificationChecks,
+      ],
+      (_, resultSet) => {
+        insertId = resultSet.insertId;
+      },
+    );
+  });
+
+  return insertId;
 }
 
 /**

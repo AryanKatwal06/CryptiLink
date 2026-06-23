@@ -28,7 +28,10 @@
  * PROTOTYPE ONLY — production must derive this during onboarding.
  */
 const SETTLEMENT_KEY_HEX =
-  'c4a3b2d1e5f6789012345678abcdef01c4a3b2d1e5f6789012345678abcdef01';
+  process.env.SETTLEMENT_AES_KEY ||
+  'c4a3b2d1e5f6789012345678abcdef01c4a3b2d1e5f6789012345678abcdef01'; // PROTOTYPE FALLBACK — NEVER USE
+                                                                     // IN PRODUCTION. Set
+                                                                     // SETTLEMENT_AES_KEY env var.
 
 /**
  * Encrypts a settlement batch payload with AES-256-GCM.

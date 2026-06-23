@@ -22,7 +22,11 @@ import SQLite from 'react-native-sqlcipher-storage';
 // In production, derive this from Android Keystore or Secure Enclave
 // ═══════════════════════════════════════════════════════════════
 const DB_NAME = 'cryptilink_merchant.db';
-const DB_ENCRYPTION_KEY = 'CRYPTILINK_PROTOTYPE_KEY_REPLACE_IN_PRODUCTION';
+const DB_ENCRYPTION_KEY =
+  process.env.MERCHANT_DB_KEY ||
+  'CRYPTILINK_PROTOTYPE_KEY_REPLACE_IN_PRODUCTION'; // PROTOTYPE FALLBACK — NEVER USE
+                                                    // IN PRODUCTION. Set
+                                                    // MERCHANT_DB_KEY env var.
 
 /** Transaction status lifecycle: OFFLINE_VERIFIED → SETTLED | SETTLEMENT_REJECTED */
 export type TransactionStatus =

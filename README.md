@@ -44,6 +44,8 @@ CryptiLink is an offline digital payment protocol built to solve the synchronous
 | Merchant App — 4-check offline verifier | ✅ Complete |
 | Merchant App — Settlement batch upload | ✅ Complete |
 | Admin Dashboard (Phase 5) | ✅ Complete |
+| Settlement batch AES-256 encryption key | ⚠️ Hardcoded fallback — set SETTLEMENT_AES_KEY env var before demo |
+| SQLCipher database encryption key | ⚠️ Hardcoded fallback — set MERCHANT_DB_KEY env var before demo |
 | Regulatory docs + RBI pitch layer | ✅ Complete |
 
 ---
