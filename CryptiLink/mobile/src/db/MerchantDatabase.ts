@@ -15,7 +15,7 @@
  * we use a hardcoded key — production MUST replace this.
  */
 
-import SQLite from 'react-native-sqlcipher-storage';
+import SQLite, { type Transaction } from 'react-native-sqlcipher-storage';
 
 // ═══════════════════════════════════════════════════════════════
 // DATABASE ENCRYPTION — PROTOTYPE ONLY
@@ -112,7 +112,7 @@ export async function closeDatabase(): Promise<void> {
  * Uses a single transaction for atomicity.
  */
 async function initializeTables(db: SQLite.SQLiteDatabase): Promise<void> {
-  await db.transaction((tx) => {
+  await db.transaction((tx: Transaction) => {
     // ── Certificate cache ─────────────────────────────────────────
     // Maps wallet_id_hash → full certificate for offline verification.
     // Phase 3's compact payload only carries the hash — the merchant
@@ -217,7 +217,7 @@ export async function getConfig(key: string): Promise<string | null> {
     [key],
   );
   if (results.rows.length === 0) return null;
-  return results.rows.item(0).value;
+  return results.rows.item(0).value as unknown as string | null;
 }
 
 /** Sets a config value (upsert) */
@@ -245,10 +245,10 @@ export async function getCachedCertificate(
   if (results.rows.length === 0) return null;
   const row = results.rows.item(0);
   return {
-    walletIdHash: row.wallet_id_hash,
-    walletId: row.wallet_id,
-    certificateJson: row.certificate_json,
-    cachedAt: row.cached_at,
+    walletIdHash: row.wallet_id_hash as unknown as string,
+    walletId: row.wallet_id as unknown as string,
+    certificateJson: row.certificate_json as unknown as string,
+    cachedAt: row.cached_at as unknown as number,
   };
 }
 
@@ -280,7 +280,7 @@ export async function getLastSequence(walletIdHash: string): Promise<number> {
     [walletIdHash],
   );
   if (results.rows.length === 0) return 0;
-  return results.rows.item(0).last_sequence;
+  return results.rows.item(0).last_sequence as unknown as number;
 }
 
 /** Updates the last seen sequence counter for a wallet */

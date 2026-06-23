@@ -30,6 +30,7 @@
  * The only transition is: OFFLINE_VERIFIED → SETTLED | SETTLEMENT_REJECTED
  * ═══════════════════════════════════════════════════════════════
  */
+import type { Transaction, ResultSet } from "react-native-sqlcipher-storage";
 
 import {
   getDatabase,
@@ -64,7 +65,7 @@ export async function recordVerifiedTransaction(txPayload: {
   const db = await getDatabase();
   let insertId = 0;
 
-  await db.transaction((tx) => {
+  await db.transaction((tx: any) => {
     // 1. Update the replay counter
     tx.executeSql(
       `INSERT OR REPLACE INTO replay_counters (wallet_id_hash, last_sequence)
@@ -89,7 +90,7 @@ export async function recordVerifiedTransaction(txPayload: {
         txPayload.receivedAt,
         txPayload.verificationChecks,
       ],
-      (_, resultSet) => {
+      (_tx: any, resultSet: ResultSet) => {
         insertId = resultSet.insertId;
       },
     );
@@ -299,12 +300,12 @@ export async function getTransactionSummary(): Promise<{
   );
 
   return {
-    pending: pendingResult.rows.item(0).count,
-    settled: settledResult.rows.item(0).count,
-    rejected: rejectedResult.rows.item(0).count,
-    pendingAmount: pendingResult.rows.item(0).total,
-    settledAmount: settledResult.rows.item(0).total,
-    rejectedAmount: rejectedResult.rows.item(0).total,
+    pending: pendingResult.rows.item(0).count as unknown as number,
+    settled: settledResult.rows.item(0).count as unknown as number,
+    rejected: rejectedResult.rows.item(0).count as unknown as number,
+    pendingAmount: (pendingResult.rows.item(0).total || 0) as unknown as number,
+    settledAmount: (settledResult.rows.item(0).total || 0) as unknown as number,
+    rejectedAmount: (rejectedResult.rows.item(0).total || 0) as unknown as number,
   };
 }
 
@@ -314,19 +315,19 @@ export async function getTransactionSummary(): Promise<{
 
 function rowToTransaction(row: Record<string, unknown>): MerchantTransaction {
   return {
-    id: row.id as number,
-    walletIdHash: row.wallet_id_hash as string,
-    walletId: row.wallet_id as string | null,
-    amount: row.amount as number,
-    sequenceCounter: row.sequence_counter as number,
-    signature: row.signature as string,
-    channel: row.channel as TransportChannel,
-    timestamp: row.timestamp as number,
-    receivedAt: row.received_at as number,
-    status: row.status as TransactionStatus,
-    settlementBatchId: row.settlement_batch_id as string | null,
-    rejectionReason: row.rejection_reason as string | null,
-    verificationChecks: row.verification_checks as string | null,
+    id: row.id as unknown as number,
+    walletIdHash: row.wallet_id_hash as unknown as string,
+    walletId: row.wallet_id as unknown as string | null,
+    amount: row.amount as unknown as number,
+    sequenceCounter: row.sequence_counter as unknown as number,
+    signature: row.signature as unknown as string,
+    channel: row.channel as unknown as TransportChannel,
+    timestamp: row.timestamp as unknown as number,
+    receivedAt: row.received_at as unknown as number,
+    status: row.status as unknown as TransactionStatus,
+    settlementBatchId: row.settlement_batch_id as unknown as string | null,
+    rejectionReason: row.rejection_reason as unknown as string | null,
+    verificationChecks: row.verification_checks as unknown as string | null,
   };
 }
 
@@ -347,16 +348,16 @@ function rowsToRejected(
   for (let i = 0; i < results.rows.length; i++) {
     const row = results.rows.item(i);
     txs.push({
-      id: row.id as number,
-      walletIdHash: row.wallet_id_hash as string,
-      amount: row.amount as number,
-      sequenceCounter: row.sequence_counter as number,
-      channel: row.channel as TransportChannel,
-      timestamp: row.timestamp as number,
-      receivedAt: row.received_at as number,
-      failedCheck: row.failed_check as string,
-      rejectionReason: row.rejection_reason as string,
-      rawPayload: row.raw_payload as string | null,
+      id: row.id as unknown as number,
+      walletIdHash: row.wallet_id_hash as unknown as string,
+      amount: row.amount as unknown as number,
+      sequenceCounter: row.sequence_counter as unknown as number,
+      channel: row.channel as unknown as TransportChannel,
+      timestamp: row.timestamp as unknown as number,
+      receivedAt: row.received_at as unknown as number,
+      failedCheck: row.failed_check as unknown as string,
+      rejectionReason: row.rejection_reason as unknown as string,
+      rawPayload: row.raw_payload as unknown as string | null,
     });
   }
   return txs;

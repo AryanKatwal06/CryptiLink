@@ -12,7 +12,7 @@ import ListeningScreen from '../src/screens/merchant/ListeningScreen';
 import VerificationScreen from '../src/screens/merchant/VerificationScreen';
 import TransactionHistoryScreen from '../src/screens/merchant/TransactionHistoryScreen';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<Record<string, object | undefined>>();
 
 export const RootNavigator: React.FC = () => {
   return (
@@ -26,8 +26,8 @@ export const RootNavigator: React.FC = () => {
         {/* Merchant-side screens (Phase 4) */}
         <Stack.Screen name="MerchantDashboard" component={MerchantDashboard} />
         <Stack.Screen name="Listening" component={ListeningScreen} />
-        <Stack.Screen name="Verification" component={VerificationScreen} />
-        <Stack.Screen name="TransactionHistory" component={TransactionHistoryScreen} />
+        <Stack.Screen name="Verification" component={VerificationScreen as unknown as React.ComponentType<Record<string, object | undefined>>} />
+        <Stack.Screen name="TransactionHistory" component={TransactionHistoryScreen as unknown as React.ComponentType<Record<string, object | undefined>>} />
       </Stack.Navigator>
     </NavigationContainer>
   );

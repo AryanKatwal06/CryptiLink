@@ -25,15 +25,8 @@ export const ENV = {
 
   FIREBASE_PROJECT_ID: requireEnv('FIREBASE_PROJECT_ID'),
 
-  RAZORPAY_KEY_ID: requireEnv('RAZORPAY_KEY_ID'),
-  RAZORPAY_MODE: optionalEnv('RAZORPAY_MODE', 'test'),
 
   POSTHOG_API_KEY: requireEnv('POSTHOG_API_KEY'),
   POSTHOG_HOST: requireEnv('POSTHOG_HOST'),
 } as const;
 
-if (ENV.IS_DEV && ENV.RAZORPAY_MODE === 'live') {
-  throw new Error(
-    '[CryptiLink] LIVE Razorpay mode detected in development. This is strictly forbidden.',
-  );
-}

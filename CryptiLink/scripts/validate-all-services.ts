@@ -31,16 +31,13 @@ async function run(name: string, script: string): Promise<Result> {
 async function main(): Promise<void> {
   console.log('');
   console.log('╔════════════════════════════════════╗');
-  console.log('║  PAYSYS — SERVICE VALIDATION       ║');
+  console.log('║  CRYPTILINK — SERVICE VALIDATION       ║');
   console.log('║  Phase 1 Infrastructure Health     ║');
   console.log('╚════════════════════════════════════╝');
   console.log('');
 
   const services = [
     { name: 'Neon PostgreSQL', script: 'scripts/validate-db.ts' },
-    { name: 'Upstash Redis', script: 'scripts/validate-redis.ts' },
-    { name: 'Firebase Admin', script: 'scripts/validate-firebase.ts' },
-    { name: 'Razorpay Sandbox', script: 'scripts/validate-razorpay.ts' },
     { name: 'Local Diagnostics', script: 'scripts/validate-diagnostics.ts' },
     { name: 'PostHog', script: 'scripts/validate-posthog.ts' },
   ];

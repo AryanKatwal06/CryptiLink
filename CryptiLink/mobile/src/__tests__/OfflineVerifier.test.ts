@@ -4,13 +4,13 @@
  * Verifies the core offline 4-check logic.
  */
 
-import { verifyTransaction } from '../OfflineVerifier';
-import { cacheCertificate, updateLastSequence, getDatabase } from '../../db/MerchantDatabase';
-import { extractRawPublicKey, stringToBytes } from '../../crypto/ecdsaVerify';
+import { verifyTransaction } from '../services/OfflineVerifier';
+import { cacheCertificate, updateLastSequence, getDatabase } from '../db/MerchantDatabase';
+import { extractRawPublicKey, stringToBytes } from '../crypto/ecdsaVerify';
 // In a real environment, we'd mock @noble/curves and SQLite here.
 // For the prototype test file, we mock the local DB calls and crypto wrapper.
 
-jest.mock('../../db/MerchantDatabase', () => ({
+jest.mock('../db/MerchantDatabase', () => ({
   getCachedCertificate: jest.fn(),
   cacheCertificate: jest.fn(),
   getLastSequence: jest.fn(),
@@ -18,7 +18,7 @@ jest.mock('../../db/MerchantDatabase', () => ({
   getDatabase: jest.fn(),
 }));
 
-jest.mock('../../crypto/ecdsaVerify', () => ({
+jest.mock('../crypto/ecdsaVerify', () => ({
   verifyEcdsaSignature: jest.fn(),
   canonicalizeCertificate: jest.fn(() => '{"canonical":true}'),
   derToRaw: jest.fn(),
@@ -33,8 +33,8 @@ jest.mock('../MerchantOnboarding', () => ({
   getCachedBankPublicKey: jest.fn(() => '-----BEGIN PUBLIC KEY-----\nMOCK_BANK_KEY\n-----END PUBLIC KEY-----'),
 }));
 
-import { getCachedCertificate, getLastSequence } from '../../db/MerchantDatabase';
-import { verifyEcdsaSignature } from '../../crypto/ecdsaVerify';
+import { getCachedCertificate, getLastSequence } from '../db/MerchantDatabase';
+import { verifyEcdsaSignature } from '../crypto/ecdsaVerify';
 
 describe('OfflineVerifier', () => {
   const validCert = {

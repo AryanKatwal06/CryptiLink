@@ -1,3 +1,4 @@
+import { getLastSequence } from "../db/MerchantDatabase";
 /**
  * CryptiLink Phase 4 — Offline 4-Check Verifier
  *
