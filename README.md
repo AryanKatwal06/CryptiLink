@@ -37,6 +37,7 @@ CryptiLink is an offline digital payment protocol built to solve the synchronous
 | Consumer App — UI shell (splash, dashboard, transmission screen) | ✅ Complete |
 | Consumer App — Native Keystore signing (CryptiLinkKeyEngine.kt) | ❌ Not built — see Roadmap |
 | Consumer App — Vision Camera QR scanner | ❌ Not built — see Roadmap |
+| Acoustic FEC — Reed-Solomon (15,11) decode | ❌ Stubbed — pass-through only, see Roadmap |
 | Consumer App — On-device cap enforcement UI | ❌ Not built — see Roadmap |
 | Transport Layer — SMS channel (SecureSignalingTransport.kt) | ✅ Complete |
 | Transport Layer — Acoustic FSK modem (UltrasoundModem.kt) | ✅ Complete |
@@ -49,7 +50,7 @@ CryptiLink is an offline digital payment protocol built to solve the synchronous
 
 ## Technical Highlights
 
-*   **Acoustic Forward Error Correction:** Reed-Solomon (15,11) over GF(2^4) decoding implemented directly in Kotlin for the ultrasonic audio channel, tolerating ~20% symbol corruption from ambient environmental noise.
+*   **Acoustic FSK Modem:** Acoustic FSK modem using Goertzel algorithm for tone detection, with RS(15,11) FEC architecture defined but pending full GF arithmetic implementation.
 *   **Optimized Payload Formatting:** Compact 84-byte binary payload designed to fit flawlessly inside a single binary SMS PDU frame, completely eliminating the fragility of multipart SMS fragmentation.
 *   **Dual-Layer Offline Verification:** Bounded risk achieved through a strict merchant-side offline sequence verifier, and a server-side PostgreSQL `SELECT ... FOR UPDATE` row-locked settlement validation.
 *   **Encrypted Offline Ledger:** SQLite with SQLCipher integration on the merchant application to securely persist offline-verified transactions prior to batch upload.
@@ -119,6 +120,7 @@ The current implementation is a functional prototype. If authorized for expansio
 *   **On-device cap enforcement UI:** Adding pre-signing UI blocks for transactions exceeding the offline caps.
 
 **Phase 6 (Future Work):**
+*   **Reed-Solomon (15,11) full GF(2^4) implementation:** Complete the Galois Field arithmetic for the acoustic channel FEC codec — currently stubbed as pass-through.
 *   **EMV-compatible kernel integration:** For stronger merchant-side cryptographic guarantees.
 *   **iOS Secure Enclave parity:** Expanding the hardware root of trust beyond the current Android-only implementation.
 *   **NPCI API integration:** Hooking the settlement engine directly into live banking ledgers (replacing the current mock server DB).

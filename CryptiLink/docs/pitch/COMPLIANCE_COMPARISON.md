@@ -31,7 +31,9 @@ CryptiLink offers a hardware-independent paradigm shift for offline transactions
 
 CryptiLink's architecture is predicated on pragmatic, bounded-risk engineering. The fundamental computer science constraints of a fully disconnected double-spend problem dictate that it is mitigated, not eliminated, without a live trusted third party. The system bounds this financial risk mathematically via a hard ₹200 per-transaction cap and a ₹500 cumulative offline exposure limit before a mandatory online refresh is required. Consequently, CryptiLink is strictly constrained to micro-transactions and is structurally unsuited for high-value retail.
 
-Furthermore, the transport mechanisms carry explicit hardware dependencies. The acoustic channel relies on ultrasonic frequencies, which suffer from a known low-pass filter issue on budget devices where hardware manufacturers artificially cap microphone frequency response to save costs. Even with Reed-Solomon (15,11) forward error correction, this introduces transmission unreliability on low-end handsets. The primary SMS channel relies entirely on baseband network availability; it cannot function on a device lacking an active SIM or SMS balance. We disclose these constraints transparently rather than obfuscating them.
+Furthermore, the transport mechanisms carry explicit hardware dependencies. The acoustic channel relies on ultrasonic frequencies, which suffer from a known low-pass filter issue on budget devices where hardware manufacturers artificially cap microphone frequency response to save costs. Even with Reed-Solomon (15,11) forward error correction*, this introduces transmission unreliability on low-end handsets. The primary SMS channel relies entirely on baseband network availability; it cannot function on a device lacking an active SIM or SMS balance. We disclose these constraints transparently rather than obfuscating them.
+
+\* *RS FEC decode is currently a pass-through stub. Full GF(2^4) arithmetic implementation is a planned completion item.*
 
 ## Section 4: Regulatory Pathway
 

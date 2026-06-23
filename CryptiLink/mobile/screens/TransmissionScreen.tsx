@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Vibration, TouchableOpacity } from 'react-nativ
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { sendPayload, subscribeToChannelEvents } from '../services/CryptiLinkTransport';
 import { trackTxTransmitted } from '../services/analytics';
+import { MMKV } from 'react-native-mmkv';
+const storage = new MMKV();
 
 type ChannelStatus = 'idle' | 'attempting' | 'success' | 'failed';
 
@@ -74,6 +76,10 @@ export default function TransmissionScreen() {
           trackTxTransmitted('failed', Number(amount) || 0, duration);
           setActiveChannel(null);
           Vibration.vibrate([0, 50, 100, 50, 100, 50]);
+          // Store failed transaction in MMKV for later retry
+          const pendingQueue = JSON.parse(storage.getString('pending_tx_queue') || '[]');
+          pendingQueue.push({ amount, merchantName, signedPayload, timestamp: Date.now() });
+          storage.set('pending_tx_queue', JSON.stringify(pendingQueue));
         }
       }
     });
@@ -173,7 +179,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   pendingSubtitle: {
-    color: '#666',
+    color: '#F59E0B',
     fontFamily: 'JetBrains Mono',
     fontSize: 12,
     letterSpacing: 1,
@@ -188,7 +194,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   mutedText: {
-    color: '#666',
+    color: '#F59E0B',
     fontSize: 14,
     textAlign: 'center',
     marginBottom: 32,
