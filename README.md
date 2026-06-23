@@ -1,5 +1,5 @@
 # CryptiLink
-> Hardware-backed offline payment protocol with dual-channel air-gap transport. No internet required.
+> Offline payment protocol with cryptographic token signing and dual-channel air-gap transport. No internet required.
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Phase](https://img.shields.io/badge/phase-5%2F5%20complete-blue)
