@@ -1,3 +1,27 @@
+/**
+ * PHASE 6 INTEGRATION TEST — Node.js simulation
+ *
+ * This test verifies that the compact payload serialization
+ * format and DER→raw64 signature conversion are correct
+ * by simulating the Kotlin signing logic using Node.js crypto.
+ *
+ * LIMITATION: This does NOT test the actual Android Keystore
+ * or StrongBox hardware signing. The real end-to-end test
+ * (Kotlin Keystore → merchant ecdsaVerify.ts) requires a
+ * physical Android device and must be performed manually
+ * before any production or demo use.
+ *
+ * Manual device test checklist:
+ * 1. Install the app on a real Android device (API 28+)
+ * 2. Complete onboarding — note whether STRONGBOX or TEE
+ *    is reported in the security level indicator
+ * 3. Load funds and verify the certificate is accepted
+ * 4. Scan a test UPI QR and complete a signing flow
+ * 5. Submit the signed payload to the bank server's
+ *    /settle endpoint and confirm PASS in the response
+ * 6. Check the merchant app receives and verifies the
+ *    same payload correctly
+ */
 const crypto = require('crypto');
 const { 
   serializePayloadData, 

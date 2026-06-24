@@ -37,9 +37,10 @@ CryptiLink is an offline digital payment protocol built to solve the synchronous
 | Consumer App — UI shell (splash, dashboard, transmission screen) | ✅ Complete |
 | Consumer App — Native Keystore signing (CryptiLinkKeyEngine.kt) | ✅ Complete (Phase 6) |
 | Consumer App — TurboModule bridge (NativeCryptiLinkKey) | ✅ Complete (Phase 6) |
-| Consumer App — Vision Camera QR scanner | ✅ Complete (Phase 6) |
+| Phase 6 end-to-end signing test | ⚠️ Simulated (Node.js) — real device test required before demo |
+| Consumer App — Vision Camera QR scanner | ❌ Not built — see Roadmap |
 | Acoustic FEC — Reed-Solomon (15,11) decode | ❌ Stubbed — pass-through only, see Roadmap |
-| Consumer App — On-device cap enforcement UI | ✅ Complete (Phase 6) |
+| Consumer App — On-device cap enforcement UI | ❌ Not built — see Roadmap |
 | Transport Layer — SMS channel (SecureSignalingTransport.kt) | ✅ Complete |
 | Transport Layer — Acoustic FSK modem (UltrasoundModem.kt) | ✅ Complete |
 | Merchant App — 4-check offline verifier | ✅ Complete |
