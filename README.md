@@ -1,5 +1,5 @@
 # CryptiLink
-> Offline payment protocol with cryptographic token signing and dual-channel air-gap transport. No internet required.
+> Hardware-backed offline payment protocol with and dual-channel air-gap transport. No internet required.
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Phase](https://img.shields.io/badge/phase-5%2F5%20complete-blue)
@@ -35,10 +35,11 @@ CryptiLink is an offline digital payment protocol built to solve the synchronous
 |-----------|--------|
 | Bank Server (Phase 1) — cert issuance, settlement, cap enforcement | ✅ Complete |
 | Consumer App — UI shell (splash, dashboard, transmission screen) | ✅ Complete |
-| Consumer App — Native Keystore signing (CryptiLinkKeyEngine.kt) | ❌ Not built — see Roadmap |
-| Consumer App — Vision Camera QR scanner | ❌ Not built — see Roadmap |
+| Consumer App — Native Keystore signing (CryptiLinkKeyEngine.kt) | ✅ Complete (Phase 6) |
+| Consumer App — TurboModule bridge (NativeCryptiLinkKey) | ✅ Complete (Phase 6) |
+| Consumer App — Vision Camera QR scanner | ✅ Complete (Phase 6) |
 | Acoustic FEC — Reed-Solomon (15,11) decode | ❌ Stubbed — pass-through only, see Roadmap |
-| Consumer App — On-device cap enforcement UI | ❌ Not built — see Roadmap |
+| Consumer App — On-device cap enforcement UI | ✅ Complete (Phase 6) |
 | Transport Layer — SMS channel (SecureSignalingTransport.kt) | ✅ Complete |
 | Transport Layer — Acoustic FSK modem (UltrasoundModem.kt) | ✅ Complete |
 | Merchant App — 4-check offline verifier | ✅ Complete |

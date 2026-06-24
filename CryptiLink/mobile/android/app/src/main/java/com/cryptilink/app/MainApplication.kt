@@ -6,6 +6,7 @@ import com.facebook.react.ReactApplication
 import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.cryptilink.bridge.CryptiLinkTransportPackage
+import com.cryptilink.crypto.CryptiLinkKeyPackage
 import com.facebook.react.shell.MainReactPackage
 import com.facebook.soloader.SoLoader
 import java.util.*
@@ -20,6 +21,7 @@ class MainApplication : Application(), ReactApplication {
             return Arrays.asList<ReactPackage>(
                 MainReactPackage(),
                 CryptiLinkTransportPackage()
+                , CryptiLinkKeyPackage()
             )
         }
 
